@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<kotlin.version>1.2.60</kotlin.version>
 		<docker.image.prefix>de.smartsquare.kickchain</docker.image.prefix>
+		<arrow-kt.version>0.7.1</arrow-kt.version>
 	</properties>
 
 	<dependencies>
@@ -44,7 +45,40 @@
 			<artifactId>kotlin-reflect</artifactId>
 		</dependency>
 
-        <dependency>
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-core</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-syntax</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-typeclasses</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-data</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-instances-core</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.arrow-kt</groupId>
+			<artifactId>arrow-instances-data</artifactId>
+			<version>${arrow-kt.version}</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
 			<version>1.0-groovy-2.4</version>
