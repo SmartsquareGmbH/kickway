@@ -14,6 +14,15 @@ class ServerSpecification extends Specification {
         server.lobbies['Ballerbude'].teamLeft.player.contains('deen')
     }
 
+    def 'server throws exception if lobby already exists'() {
+        when:
+        server.createNewGame('Ballerbude', 'deen')
+        server.createNewGame('Ballerbude', 'deen')
+        then:
+        def error = thrown(RuntimeException)
+        error.message == "A lobby with the name Ballerbude already exists"
+    }
+
     def 'join team of owner'() {
         given:
         server.createNewGame('Ballerbude', 'deen')
@@ -32,13 +41,31 @@ class ServerSpecification extends Specification {
         server.lobbies['Ballerbude'].teamRight.player.contains('ruby')
     }
 
+    def 'join non existent lobby'() {
+        when:
+        server.joinLeft('Ballerbude', 'ruby')
+        then:
+        def error = thrown(RuntimeException)
+        error.message == "A lobby with the name Ballerbude does not exist"
+    }
+
     def 'spectate'() {
+        given:
+        server.createNewGame('Ballerbude', 'deen')
         when:
         server.joinRight('Ballerbude', 'ruby')
         then:
         server.spectate('Ballerbude') == server.lobbies['Ballerbude']
-
     }
+
+    def 'server throws exception if a lobby without name is attempted to create'() {
+        when:
+        server.createNewGame('', 'deen')
+        then:
+        def error = thrown(RuntimeException)
+        error.message == 'A lobby must have a non-empty name'
+    }
+
 
     def 'score team left'() {
         given:

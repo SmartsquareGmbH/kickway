@@ -8,17 +8,22 @@ class Server(val repository: GameRepository) {
     private val lobbies: MutableMap<String, Game> = mutableMapOf()
 
     fun createNewGame(lobby: String, owner: String) {
+        if (lobby.none()) throw RuntimeException("A lobby must have a non-empty name")
+        if (lobbies.containsKey(lobby)) throw RuntimeException("A lobby with the name ${lobby} already exists")
+
         lobbies[lobby] = Game(owner)
     }
 
     fun spectate(lobby: String): Game? = lobbies[lobby]
 
     fun joinLeft(lobby: String, name: String) {
-        lobbies[lobby]?.teamLeft?.player?.add(name)
+        val game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
+        game.teamLeft.join(name)
     }
 
     fun joinRight(lobby: String, name: String) {
-        lobbies[lobby]?.teamRight?.player?.add(name)
+        val game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
+        game.teamRight.join(name)
     }
 
     fun scoreTeamLeft(lobby: String) {
