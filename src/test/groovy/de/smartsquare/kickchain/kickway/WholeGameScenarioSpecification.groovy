@@ -82,6 +82,9 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
 
+
+        cleanup:
+        server.lobbies.clear()
     }
 
 }
