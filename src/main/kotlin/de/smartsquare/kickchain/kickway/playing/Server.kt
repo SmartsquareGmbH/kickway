@@ -53,14 +53,14 @@ class Server(val repository: GameRepository) : Spectatable {
     }
 
     private fun saveOrRemove(
-        lobbyWithIncrementedScore: Game,
+        lobby: Game,
         lobbyName: String
     ) {
-        if (lobbyWithIncrementedScore.completed) {
-            repository.save(lobbyWithIncrementedScore)
+        if (lobby.completed) {
+            repository.save(lobby)
             lobbies.remove(lobbyName)
         } else {
-            lobbies[lobbyName] = lobbyWithIncrementedScore
+            lobbies[lobbyName] = lobby
         }
     }
 }
