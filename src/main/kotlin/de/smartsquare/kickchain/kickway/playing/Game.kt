@@ -32,4 +32,6 @@ data class Game(val owner: String) {
 
     fun leftTeamWon(): Boolean = teamLeft.score == 10
 
+    fun isFull(): Boolean = teamLeft.isFull() && teamRight.isFull()
+
 }

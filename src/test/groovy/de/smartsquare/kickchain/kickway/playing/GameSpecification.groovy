@@ -41,4 +41,13 @@ class GameSpecification extends Specification {
         game.teamLeft.score == 10
     }
 
+    def 'lobby is full if four players joined'() {
+        when:
+        game.teamLeft.join("ruby")
+        game.teamRight.join("skonair")
+        game.teamRight.join("drs")
+        then:
+        game.isFull()
+    }
+
 }

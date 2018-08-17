@@ -7,22 +7,23 @@ class Server(val repository: GameRepository) : Spectatable {
 
     private val lobbies: MutableMap<String, Game> = mutableMapOf()
 
-    fun createNewGame(lobby: String, owner: String) {
+    fun createNewLobby(lobby: String, owner: String) {
         if (lobby.none()) throw RuntimeException("A lobby must have a non-empty name")
         if (lobbies.containsKey(lobby)) throw RuntimeException("A lobby with the name ${lobby} already exists")
 
         lobbies[lobby] = Game(owner)
     }
 
-    override fun spectate(lobby: String): Game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exists")
+    override fun spectate(lobby: String): Game = lobbies[lobby]
+            ?: throw RuntimeException("A lobby with the name ${lobby} does not exists")
 
     fun joinLeft(lobby: String, name: String) {
-        val game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
+        val game = lobbies[lobby] ?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
         game.teamLeft.join(name)
     }
 
     fun joinRight(lobby: String, name: String) {
-        val game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
+        val game = lobbies[lobby] ?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
         game.teamRight.join(name)
     }
 
@@ -39,6 +40,10 @@ class Server(val repository: GameRepository) : Spectatable {
 
     fun scoreTeamRight(lobby: String) {
         lobbies[lobby]?.scoreTeamRight()
+    }
+
+    fun getJoinableLobbies(): List<String> {
+        return lobbies.filterNot { it.value.isFull() }.keys.toList()
     }
 
 }

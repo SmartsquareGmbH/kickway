@@ -7,17 +7,17 @@ class ServerSpecification extends Specification {
     def repository = Mock(GameRepository)
     def server = new Server(repository)
 
-    def 'create new game'() {
+    def 'create new lobby'() {
         when:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         then:
         server.lobbies['Ballerbude'].teamLeft.player.contains('deen')
     }
 
     def 'server throws exception if lobby already exists'() {
         when:
-        server.createNewGame('Ballerbude', 'deen')
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         then:
         def error = thrown(RuntimeException)
         error.message == "A lobby with the name Ballerbude already exists"
@@ -25,7 +25,7 @@ class ServerSpecification extends Specification {
 
     def 'join team of owner'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinLeft('Ballerbude', 'ruby')
         then:
@@ -34,7 +34,7 @@ class ServerSpecification extends Specification {
 
     def 'join other team'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinRight('Ballerbude', 'ruby')
         then:
@@ -51,7 +51,7 @@ class ServerSpecification extends Specification {
 
     def 'spectate'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinRight('Ballerbude', 'ruby')
         then:
@@ -60,7 +60,7 @@ class ServerSpecification extends Specification {
 
     def 'server throws exception if a lobby without name is attempted to create'() {
         when:
-        server.createNewGame('', 'deen')
+        server.createNewLobby('', 'deen')
         then:
         def error = thrown(RuntimeException)
         error.message == 'A lobby must have a non-empty name'
@@ -69,7 +69,7 @@ class ServerSpecification extends Specification {
 
     def 'score team left'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         server.scoreTeamLeft('Ballerbude')
         then:
@@ -78,7 +78,7 @@ class ServerSpecification extends Specification {
 
     def 'score team right'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         server.scoreTeamRight('Ballerbude')
         then:
@@ -87,7 +87,7 @@ class ServerSpecification extends Specification {
 
     def 'server persists game if one team has won'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         10.times { server.scoreTeamLeft('Ballerbude') }
         then:
@@ -96,7 +96,7 @@ class ServerSpecification extends Specification {
 
     def 'server persists only once'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         11.times { server.scoreTeamLeft('Ballerbude') }
         then:
@@ -105,7 +105,7 @@ class ServerSpecification extends Specification {
 
     def 'server removes completed game'() {
         given:
-        server.createNewGame('Ballerbude', 'deen')
+        server.createNewLobby('Ballerbude', 'deen')
         when:
         10.times { server.scoreTeamLeft('Ballerbude') }
         then:
@@ -120,8 +120,22 @@ class ServerSpecification extends Specification {
         error.message == 'A lobby with the name lobbywhichdoesnotexists does not exists'
     }
 
-    def 'get list of joinable games from server'() {
+    def 'server returns list of joinable lobby with one player'() {
+        when:
+        server.createNewLobby('Ballerbude', 'deen')
+        then:
+        server.getJoinableLobbies().contains('Ballerbude')
+    }
 
+    def 'server does not return joinable lobby if game is full'() {
+        when:
+        server.createNewLobby('Ballerbude', 'deen')
+        server.joinLeft('Ballerbude', 'ruby')
+        server.joinRight('Ballerbude', 'skonair')
+        server.joinRight('Ballerbude', 'alexn')
+
+        then:
+        server.getJoinableLobbies().isEmpty()
     }
 
 }
