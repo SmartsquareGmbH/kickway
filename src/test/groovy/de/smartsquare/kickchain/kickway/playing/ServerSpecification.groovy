@@ -112,6 +112,14 @@ class ServerSpecification extends Specification {
         server.lobbies.isEmpty()
     }
 
+    def 'server throws exception if lobby is attempted to spectate a lobby that does not exists'() {
+        when:
+        server.spectate('lobbywhichdoesnotexists')
+        then:
+        def error = thrown(RuntimeException)
+        error.message == 'A lobby with the name lobbywhichdoesnotexists does not exists'
+    }
+
     def 'get list of joinable games from server'() {
 
     }

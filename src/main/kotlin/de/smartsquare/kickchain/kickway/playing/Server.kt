@@ -3,7 +3,7 @@ package de.smartsquare.kickchain.kickway.playing
 import org.springframework.stereotype.Component
 
 @Component
-class Server(val repository: GameRepository) {
+class Server(val repository: GameRepository) : Spectatable {
 
     private val lobbies: MutableMap<String, Game> = mutableMapOf()
 
@@ -14,7 +14,7 @@ class Server(val repository: GameRepository) {
         lobbies[lobby] = Game(owner)
     }
 
-    fun spectate(lobby: String): Game? = lobbies[lobby]
+    override fun spectate(lobby: String): Game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exists")
 
     fun joinLeft(lobby: String, name: String) {
         val game = lobbies[lobby]?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
