@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
+import static org.hamcrest.CoreMatchers.is
 import static org.springframework.http.MediaType.APPLICATION_JSON
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -35,7 +36,11 @@ class SpectatorControllerSpecification extends Specification {
         expect:
         mockMvc.perform(get("/game/Ballerbude").accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json('{"owner":"deen","teamLeft":{"player":["deen"],"score":0},"teamRight":{"player":[],"score":0}}'))
+                .andExpect(jsonPath('$.rightTeam.players.length()', is(0)))
+                .andExpect(jsonPath('$.leftTeam.players[0]', is('deen')))
+                .andExpect(jsonPath('$.rightTeam.score', is(0)))
+                .andExpect(jsonPath('$.leftTeam.score', is(0)))
+                .andExpect(jsonPath('$.owner', is('deen')))
     }
 
 }

@@ -8,6 +8,7 @@ import spock.lang.Specification
 
 import static org.hamcrest.CoreMatchers.is
 import static org.springframework.http.MediaType.TEXT_PLAIN
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -25,7 +26,7 @@ class GameControllerSpecification extends Specification {
     @Autowired
     GameController gameController
 
-    def 'rest endpoint adds new lobby'() {
+    def 'rest endpoint adds new lobby on create'() {
         when:
         mockMvc.perform(post("/game/solo/Ballerbude/deen")
                 .content("141839841293")
@@ -34,7 +35,7 @@ class GameControllerSpecification extends Specification {
                 .andExpect(status().isCreated())
 
         then:
-        server.lobbies['Ballerbude'].teamLeft.player == ['deen']
+        server.lobbies['Ballerbude'].leftTeam.players == ['deen']
 
         cleanup:
         server.lobbies.clear()
@@ -78,7 +79,7 @@ class GameControllerSpecification extends Specification {
         server.lobbies.clear()
     }
 
-    def 'server adds link for joining the left team'() {
+    def 'server adds link for joining the left team on create'() {
         expect:
         mockMvc.perform(post("/game/solo/Ballerbude/deen")
                 .content("141839841293")
@@ -91,7 +92,7 @@ class GameControllerSpecification extends Specification {
         server.lobbies.clear()
     }
 
-    def 'server adds link for joining the right team'() {
+    def 'server adds link for joining the right team on create'() {
         expect:
         mockMvc.perform(post("/game/solo/Ballerbude/deen")
                 .content("141839841293")
@@ -103,13 +104,52 @@ class GameControllerSpecification extends Specification {
         server.lobbies.clear()
     }
 
-    def 'server adds selfref'() {
+    def 'server adds selfref on create'() {
         expect:
         mockMvc.perform(post("/game/solo/Ballerbude/deen")
                 .content("141839841293")
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.self.href', is('http://localhost/game/Ballerbude')))
+
+        cleanup:
+        server.lobbies.clear()
+    }
+
+    def 'score left team'() {
+        given:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN)
+                .characterEncoding("UTF-8"))
+
+        when:
+        mockMvc.perform(patch("/game/score/left/Ballerbude")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN)
+                .characterEncoding("UTF-8"))
+
+        then:
+        server.lobbies['Ballerbude'].leftTeam.score == 1
+
+        cleanup:
+        server.lobbies.clear()
+    }
+
+
+    def 'score left team will be denied if the raspberry id does not match'() {
+        given:
+        mockMvc.perform(patch("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN)
+                .characterEncoding("UTF-8"))
+
+        expect:
+        mockMvc.perform(patch("/game/score/left/Ballerbude")
+                .content("1337")
+                .contentType(TEXT_PLAIN)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isUnauthorized())
 
         cleanup:
         server.lobbies.clear()

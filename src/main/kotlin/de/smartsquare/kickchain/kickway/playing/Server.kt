@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 class Server(val repository: GameRepository) : Spectatable {
 
     private val lobbies: MutableMap<String, Game> = mutableMapOf()
+    val joinableLobbyNames get() = lobbies.filterNot { (_, lobby) -> lobby.full }.keys.toList()
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun MutableMap<String, Game>.getOrThrowException(name: String): Game {
@@ -16,49 +17,50 @@ class Server(val repository: GameRepository) : Spectatable {
         if (lobby.none()) throw IllegalArgumentException("A lobby must have a non-empty name")
         if (lobbies.containsKey(lobby)) throw LobbyAlreadyExistsException(lobby)
 
-        val game = Game(owner)
-        lobbies[lobby] = game
-        return game
+        return Game(owner).also { lobbies[lobby] = it }
     }
 
     override fun spectate(lobbyName: String): Game = lobbies.getOrThrowException(lobbyName)
 
     fun joinLeft(lobbyName: String, name: String) {
-        val lobby = lobbies.getOrThrowException(lobbyName)
-        lobby.teamLeft.join(name)
+        lobbies[lobbyName] = lobbies.getOrThrowException(lobbyName).joinLeftTeam(name)
     }
 
     fun joinRight(lobbyName: String, name: String) {
-        val lobby = lobbies.getOrThrowException(lobbyName)
-        lobby.teamRight.join(name)
+        lobbies[lobbyName] = lobbies.getOrThrowException(lobbyName).joinRightTeam(name)
     }
 
     fun leave(lobbyName: String, name: String) {
-        val lobby = lobbies.getOrThrowException(lobbyName)
-
-        lobby.teamLeft.leave(name)
-        lobby.teamRight.leave(name)
-
-        if (lobby.isEmpty()) lobbies.remove(lobbyName)
+        lobbies.getOrThrowException(lobbyName)
+            .leaveLeftTeam(name)
+            .leaveRightTeam(name)
+            .also { lobbies[lobbyName] = it }
+            .takeIf { it.empty }
+            ?.also { lobbies.remove(lobbyName) }
     }
 
-    fun scoreTeamLeft(lobby: String) {
-        lobbies[lobby]?.let {
-            it.scoreTeamLeft()
+    fun scoreLeftTeam(lobbyName: String) {
+        lobbies[lobbyName]
+            ?.scoreLeftTeam()
+            ?.also { saveOrRemove(it, lobbyName) }
+    }
 
-            if (it.isCompleted()) {
-                repository.save(it)
-                lobbies.remove(lobby)
-            }
+    fun scoreRightTeam(lobbyName: String) {
+        lobbies[lobbyName]
+            ?.scoreRightTeam()
+            ?.also { saveOrRemove(it, lobbyName) }
+    }
+
+    private fun saveOrRemove(
+        lobbyWithIncrementedScore: Game,
+        lobbyName: String
+    ) {
+        if (lobbyWithIncrementedScore.completed) {
+            repository.save(lobbyWithIncrementedScore)
+            lobbies.remove(lobbyName)
+        } else {
+            lobbies[lobbyName] = lobbyWithIncrementedScore
         }
-    }
-
-    fun scoreTeamRight(lobby: String) {
-        lobbies[lobby]?.scoreTeamRight()
-    }
-
-    fun getJoinableLobbies(): List<String> {
-        return lobbies.filterNot { it.value.isFull() }.keys.toList()
     }
 
 }

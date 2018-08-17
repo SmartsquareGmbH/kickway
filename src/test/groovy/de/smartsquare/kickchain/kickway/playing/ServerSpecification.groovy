@@ -11,7 +11,7 @@ class ServerSpecification extends Specification {
         when:
         server.createNewLobby('Ballerbude', 'deen')
         then:
-        server.lobbies['Ballerbude'].teamLeft.player.contains('deen')
+        server.lobbies['Ballerbude'].leftTeam.players.contains('deen')
     }
 
     def 'server throws exception if lobby already exists'() {
@@ -24,21 +24,21 @@ class ServerSpecification extends Specification {
     }
 
     def 'join team of owner'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinLeft('Ballerbude', 'ruby')
         then:
-        server.lobbies['Ballerbude'].teamLeft.player.contains('ruby')
+        server.lobbies['Ballerbude'].leftTeam.players.contains('ruby')
     }
 
     def 'join other team'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinRight('Ballerbude', 'ruby')
         then:
-        server.lobbies['Ballerbude'].teamRight.player.contains('ruby')
+        server.lobbies['Ballerbude'].rightTeam.players.contains('ruby')
     }
 
     def 'join non existent lobby'() {
@@ -50,7 +50,7 @@ class ServerSpecification extends Specification {
     }
 
     def 'spectate'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinRight('Ballerbude', 'ruby')
@@ -67,46 +67,46 @@ class ServerSpecification extends Specification {
     }
 
     def 'score team left'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
-        server.scoreTeamLeft('Ballerbude')
+        server.scoreLeftTeam('Ballerbude')
         then:
-        server.lobbies['Ballerbude'].teamLeft.score == 1
+        server.lobbies['Ballerbude'].leftTeam.score == 1
     }
 
     def 'score team right'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
-        server.scoreTeamRight('Ballerbude')
+        server.scoreLeftTeam('Ballerbude')
         then:
-        server.lobbies['Ballerbude'].teamRight.score == 1
+        server.lobbies['Ballerbude'].leftTeam.score == 1
     }
 
     def 'server persists game if one team has won'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
-        10.times { server.scoreTeamLeft('Ballerbude') }
+        10.times { server.scoreLeftTeam('Ballerbude') }
         then:
         1 * repository.save(_)
     }
 
     def 'server persists only once'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
-        11.times { server.scoreTeamLeft('Ballerbude') }
+        11.times { server.scoreLeftTeam('Ballerbude') }
         then:
         1 * repository.save(_)
     }
 
     def 'server removes completed game'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
-        10.times { server.scoreTeamLeft('Ballerbude') }
+        10.times { server.scoreLeftTeam('Ballerbude') }
         then:
         server.lobbies.isEmpty()
     }
@@ -123,7 +123,7 @@ class ServerSpecification extends Specification {
         when:
         server.createNewLobby('Ballerbude', 'deen')
         then:
-        server.getJoinableLobbies().contains('Ballerbude')
+        server.joinableLobbyNames.contains('Ballerbude')
     }
 
     def 'server does not return joinable lobby if game is full'() {
@@ -134,21 +134,21 @@ class ServerSpecification extends Specification {
         server.joinRight('Ballerbude', 'alexn')
 
         then:
-        server.getJoinableLobbies().isEmpty()
+        server.joinableLobbyNames.isEmpty()
     }
 
     def 'leave server'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
         server.joinLeft('Ballerbude', 'ruby')
         server.leave('Ballerbude', 'ruby')
         then:
-        server.lobbies['Ballerbude'].teamLeft.player == ['deen']
+        server.lobbies['Ballerbude'].leftTeam.players == ['deen']
     }
 
     def 'server removes lobby if is empty'() {
-        given:
+        setup:
         server.createNewLobby('Ballerbude', 'deen')
         when:
         server.leave('Ballerbude', 'deen')

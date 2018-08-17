@@ -3,46 +3,53 @@ package de.smartsquare.kickchain.kickway.playing
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.hateoas.ResourceSupport
 
-data class Game(val owner: String) : ResourceSupport() {
+data class Game(val leftTeam: Team, val rightTeam: Team) : ResourceSupport() {
 
-    val teamLeft = Team(owner)
-    val teamRight = Team()
+    constructor(owner: String) : this(Team(owner), Team())
 
-    private var completed = false
+    @get:JsonIgnore
+    val full
+        get() = leftTeam.isFull() && rightTeam.isFull()
 
-    fun scoreTeamLeft() {
-        if (completed.not()) {
-            teamLeft.score()
-        }
+    @get:JsonIgnore
+    val empty
+        get() = rightTeam.isEmpty() && leftTeam.isEmpty()
 
-        if (leftTeamWon()) {
-            completed = true
-        }
+    @get:JsonIgnore
+    val rightTeamWon
+        get() = rightTeam.score >= 10
+
+    @get:JsonIgnore
+    val leftTeamWon
+        get() = leftTeam.score >= 10
+
+    @get:JsonIgnore
+    val completed = leftTeamWon || rightTeamWon
+
+    val owner: String
+        get () = leftTeam.players.firstOrNull()
+                ?: rightTeam.players.firstOrNull()
+                ?: throw IllegalStateException("No players found")
+
+    fun scoreLeftTeam(): Game = if (completed.not()) {
+        this.copy(leftTeam = leftTeam.score())
+    } else {
+        this
     }
 
-    fun scoreTeamRight() {
-        if (completed.not()) {
-            teamRight.score()
-        }
-
-        if (rightTeamWon()) {
-            completed = true
-        }
+    fun scoreRightTeam(): Game = if (completed.not()) {
+        this.copy(rightTeam = rightTeam.score())
+    } else {
+        this
     }
 
-    @JsonIgnore
-    fun isCompleted(): Boolean = completed
+    fun joinLeftTeam(name: String) = this.copy(leftTeam = leftTeam + name)
 
-    @JsonIgnore
-    fun rightTeamWon(): Boolean = teamRight.score == 10
+    fun joinRightTeam(name: String) = this.copy(rightTeam = rightTeam + name)
 
-    @JsonIgnore
-    fun leftTeamWon(): Boolean = teamLeft.score == 10
+    fun leaveLeftTeam(name: String) = this.copy(leftTeam = leftTeam - name)
 
-    @JsonIgnore
-    fun isFull(): Boolean = teamLeft.isFull() && teamRight.isFull()
+    fun leaveRightTeam(name: String) = this.copy(rightTeam = rightTeam - name)
 
-    @JsonIgnore
-    fun isEmpty(): Boolean = teamRight.isEmpty() && teamLeft.isEmpty()
 
 }
