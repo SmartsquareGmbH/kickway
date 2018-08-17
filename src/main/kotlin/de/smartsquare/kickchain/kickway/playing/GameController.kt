@@ -15,7 +15,7 @@ class GameController(val server: Server) {
     @PostMapping("/game/solo/{lobbyName}/{ownerName}")
     fun create(@PathVariable("lobbyName") lobbyName: String, @PathVariable("ownerName") ownerName: String, @NotEmpty @RequestBody raspberry: String): ResponseEntity<Any> {
         server.createNewLobby(lobbyName, ownerName)
-        authorization.put(raspberry, lobbyName)
+        authorization[raspberry] = lobbyName
 
         return ResponseEntity.ok().build<Any>()
     }
