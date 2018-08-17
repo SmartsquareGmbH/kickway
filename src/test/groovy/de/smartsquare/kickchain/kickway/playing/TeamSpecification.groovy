@@ -30,5 +30,4 @@ class TeamSpecification extends Specification {
         error.message == 'A player must have a non-empty name'
     }
 
-
 }
