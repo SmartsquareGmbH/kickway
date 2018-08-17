@@ -1,4 +1,4 @@
-package de.smartsquare.kickchain.kickway.owning
+package de.smartsquare.kickchain.kickway.playing
 
 data class Team(val player: MutableList<String>, var score: Int) {
 

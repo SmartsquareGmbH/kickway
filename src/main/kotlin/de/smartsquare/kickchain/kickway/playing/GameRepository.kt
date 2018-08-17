@@ -1,4 +1,4 @@
-package de.smartsquare.kickchain.kickway.owning
+package de.smartsquare.kickchain.kickway.playing
 
 interface GameRepository {
 
