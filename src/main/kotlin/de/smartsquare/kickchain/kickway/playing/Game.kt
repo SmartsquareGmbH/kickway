@@ -1,5 +1,7 @@
 package de.smartsquare.kickchain.kickway.playing
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class Game(val owner: String) {
 
     val teamLeft = Team(owner)
@@ -27,14 +29,19 @@ data class Game(val owner: String) {
         }
     }
 
+    @JsonIgnore
     fun isCompleted(): Boolean = completed
 
+    @JsonIgnore
     fun rightTeamWon(): Boolean = teamRight.score == 10
 
+    @JsonIgnore
     fun leftTeamWon(): Boolean = teamLeft.score == 10
 
+    @JsonIgnore
     fun isFull(): Boolean = teamLeft.isFull() && teamRight.isFull()
 
+    @JsonIgnore
     fun isEmpty(): Boolean = teamRight.isEmpty() && teamLeft.isEmpty()
 
 }

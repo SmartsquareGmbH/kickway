@@ -1,5 +1,7 @@
 package de.smartsquare.kickchain.kickway.playing
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class Team(val player: MutableList<String>, var score: Int) {
 
     constructor(owner: String) : this(mutableListOf(owner), 0)
@@ -18,8 +20,10 @@ data class Team(val player: MutableList<String>, var score: Int) {
         player.add(name)
     }
 
+    @JsonIgnore
     fun isFull(): Boolean = player.size == 2
 
+    @JsonIgnore
     fun isEmpty(): Boolean = player.size == 0
 
     fun leave(name: String) {
