@@ -66,4 +66,20 @@ class WholeGameScenarioSpecification extends Specification {
         server.lobbies.clear()
     }
 
+    def 'play soloq'() {
+        when:
+        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+        mockMvc.perform(patch('/game/join/right/Ballerbude/skonair'))
+
+        then:
+        mockMvc.perform(get("/game/Ballerbude"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('$.leftTeam.players[0]', is('deen')))
+                .andExpect(jsonPath('$.rightTeam.players[0]', is('skonair')))
+                .andExpect(jsonPath('$.rightTeam.score', is(0)))
+                .andExpect(jsonPath('$.leftTeam.score', is(0)))
+                .andExpect(jsonPath('$.owner', is('deen')))
+
+    }
+
 }
