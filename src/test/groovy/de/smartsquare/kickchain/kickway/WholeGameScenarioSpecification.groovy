@@ -1,5 +1,6 @@
 package de.smartsquare.kickchain.kickway
 
+import de.smartsquare.kickchain.kickway.playing.Server
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,6 +18,9 @@ class WholeGameScenarioSpecification extends Specification {
 
     @Autowired
     MockMvc mockMvc
+
+    @Autowired
+    Server server
 
     def 'spectate game after third goal'() {
         when:
@@ -38,6 +42,9 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.rightTeam.score', is(0)))
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
+
+        cleanup:
+        server.lobbies.clear()
     }
 
     def 'server removes lobby after game is over'() {
@@ -54,6 +61,9 @@ class WholeGameScenarioSpecification extends Specification {
         then:
         mockMvc.perform(get("/game/Ballerbude"))
                 .andExpect(status().isNotFound())
+
+        cleanup:
+        server.lobbies.clear()
     }
 
 }
