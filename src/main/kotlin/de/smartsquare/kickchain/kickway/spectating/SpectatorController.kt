@@ -1,6 +1,7 @@
 package de.smartsquare.kickchain.kickway.spectating
 
 import de.smartsquare.kickchain.kickway.playing.Game
+import de.smartsquare.kickchain.kickway.playing.LobbyNotFoundException
 import de.smartsquare.kickchain.kickway.playing.Spectatable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,7 +16,7 @@ class SpectatorController(val server: Spectatable) {
         try {
             val lobby = server.spectate(lobbyName)
             return ResponseEntity.ok(lobby)
-        } catch (e: IllegalArgumentException) {
+        } catch (e: LobbyNotFoundException) {
             return ResponseEntity.notFound().build()
         }
     }

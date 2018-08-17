@@ -56,7 +56,7 @@ class GameSpecification extends Specification {
         game.teamRight.join('ruby')
         then:
         def error = thrown(RuntimeException)
-        error.message == "A player with the name ruby is already in-game"
+        error.message == "The player ruby already joined the lobby"
     }
 
 }

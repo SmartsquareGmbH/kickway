@@ -13,9 +13,9 @@ data class Team(val player: MutableList<String>, var score: Int) {
     }
 
     fun join(name: String) {
-        if (name.none()) throw RuntimeException("A player must have a non-empty name")
-        if (player.size == 2) throw RuntimeException("The team is full")
-        if (player.contains(name)) throw RuntimeException("A player with the name ${name} is already in-game")
+        if (name.none()) throw IllegalArgumentException("A player must have a non-empty name")
+        if (player.size == 2) throw TeamAlreadyFullException()
+        if (player.contains(name)) throw PlayerAlreadyExistsException(name)
 
         player.add(name)
     }

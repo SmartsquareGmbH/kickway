@@ -20,7 +20,7 @@ class ServerSpecification extends Specification {
         server.createNewLobby('Ballerbude', 'deen')
         then:
         def error = thrown(RuntimeException)
-        error.message == "A lobby with the name Ballerbude already exists"
+        error.message == "The lobby Ballerbude already exists"
     }
 
     def 'join team of owner'() {
@@ -46,7 +46,7 @@ class ServerSpecification extends Specification {
         server.joinLeft('Ballerbude', 'ruby')
         then:
         def error = thrown(RuntimeException)
-        error.message == "A lobby with the name Ballerbude does not exist"
+        error.message == "Lobby with name Ballerbude not found"
     }
 
     def 'spectate'() {
@@ -116,7 +116,7 @@ class ServerSpecification extends Specification {
         server.spectate('lobbywhichdoesnotexists')
         then:
         def error = thrown(RuntimeException)
-        error.message == 'A lobby with the name lobbywhichdoesnotexists does not exist'
+        error.message == 'Lobby with name lobbywhichdoesnotexists not found'
     }
 
     def 'server returns list of joinable lobby with one player'() {

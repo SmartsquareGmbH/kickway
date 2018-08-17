@@ -1,7 +1,6 @@
 package de.smartsquare.kickchain.kickway.playing
 
 import org.springframework.stereotype.Component
-import sun.plugin.dom.exception.InvalidStateException
 
 @Component
 class Server(val repository: GameRepository) : Spectatable {
@@ -10,12 +9,12 @@ class Server(val repository: GameRepository) : Spectatable {
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun MutableMap<String, Game>.getOrThrowException(name: String): Game {
-        return this[name] ?: throw IllegalArgumentException("A lobby with the name ${name} does not exist")
+        return this[name] ?: throw LobbyNotFoundException(name)
     }
 
     fun createNewLobby(lobby: String, owner: String) {
         if (lobby.none()) throw IllegalArgumentException("A lobby must have a non-empty name")
-        if (lobbies.containsKey(lobby)) throw InvalidStateException("A lobby with the name ${lobby} already exists")
+        if (lobbies.containsKey(lobby)) throw LobbyAlreadyExistsException(lobby)
 
         lobbies[lobby] = Game(owner)
     }

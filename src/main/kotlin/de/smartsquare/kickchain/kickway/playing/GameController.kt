@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import sun.plugin.dom.exception.InvalidStateException
 import javax.validation.constraints.NotEmpty
 
 @RestController
@@ -20,19 +19,35 @@ class GameController(val server: Server) {
             server.createNewLobby(lobbyName, ownerName)
         } catch (e: IllegalArgumentException) {
             return ResponseEntity.badRequest().body(e.message)
-        } catch (e: InvalidStateException) {
+        } catch (e: LobbyAlreadyExistsException) {
             return ResponseEntity.status(CONFLICT).body(e.message)
         }
         authorization[raspberry] = lobbyName
 
-        return ResponseEntity.ok().build<Any>()
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/game/join/left/{lobbyName}/{playerName}")
-    fun joinLeft(@PathVariable("lobbyName") lobbyName: String, @PathVariable("playerName") playerName: String, @NotEmpty @RequestBody raspberry: String): ResponseEntity<Any> {
-
-        return ResponseEntity.ok().build<Any>()
+    fun joinLeft(@PathVariable("lobbyName") lobbyName: String, @PathVariable("playerName") playerName: String): ResponseEntity<Any> {
+        try {
+            server.joinLeft(lobbyName, playerName)
+            return ResponseEntity.ok().build()
+        } catch (e: LobbyNotFoundException) {
+            return ResponseEntity.notFound().build()
+        }
     }
+
+
+    @PostMapping("/game/join/right/{lobbyName}/{playerName}")
+    fun joinRight(@PathVariable("lobbyName") lobbyName: String, @PathVariable("playerName") playerName: String): ResponseEntity<Any> {
+        try {
+            server.joinRight(lobbyName, playerName)
+            return ResponseEntity.ok().build()
+        } catch (e: LobbyNotFoundException) {
+            return ResponseEntity.notFound().build()
+        }
+    }
+
 
 
 }
