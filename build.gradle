@@ -15,6 +15,8 @@ buildscript {
         jacksonVersion = "2.9.6"
 
         spockVersion = "1.1-groovy-2.4"
+
+        mockserverVersion = "3.10.8"
     }
 
     repositories {
@@ -81,6 +83,9 @@ dependencies {
     runtime "org.springframework.boot:spring-boot-devtools"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
+
+    testImplementation "org.mock-server:mockserver-netty:$mockserverVersion"
+    testImplementation "org.mock-server:mockserver-client-java:$mockserverVersion"
 
     testCompile "org.spockframework:spock-core:$spockVersion"
     testCompile "org.spockframework:spock-spring:$spockVersion"
