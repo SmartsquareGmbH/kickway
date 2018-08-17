@@ -59,5 +59,19 @@ class GameControllerSpecification extends Specification {
                 .andExpect(status().is(400))
     }
 
+    def 'server responds conflict if the lobby already exists'() {
+        given:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN)
+                .characterEncoding("UTF-8"))
+
+        expect:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN))
+                .andExpect(status().isConflict())
+    }
+
 
 }

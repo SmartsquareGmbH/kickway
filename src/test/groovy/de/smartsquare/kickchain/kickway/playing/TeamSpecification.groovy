@@ -7,8 +7,10 @@ class TeamSpecification extends Specification {
     def team = new Team()
 
     def 'score increments the score by one'() {
-        when: team.score()
-        then: team.score == 1
+        when:
+        team.score()
+        then:
+        team.score == 1
     }
 
     def 'team throws exception if a third player tries to join the team'() {
