@@ -6,8 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
+import static org.hamcrest.CoreMatchers.is
 import static org.springframework.http.MediaType.TEXT_PLAIN
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
@@ -29,7 +31,7 @@ class GameControllerSpecification extends Specification {
                 .content("141839841293")
                 .contentType(TEXT_PLAIN)
                 .characterEncoding("UTF-8"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
 
         then:
         server.lobbies['Ballerbude'].teamLeft.player == ['deen']
@@ -44,7 +46,7 @@ class GameControllerSpecification extends Specification {
                 .content("141839841293")
                 .contentType(TEXT_PLAIN)
                 .characterEncoding("UTF-8"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
 
         then:
         gameController.authorization['141839841293'] == 'Ballerbude'
@@ -71,6 +73,33 @@ class GameControllerSpecification extends Specification {
                 .content("141839841293")
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isConflict())
+    }
+
+    def 'server adds link for joining the left team'() {
+        expect:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath('$._links.joinLeft.href', is('http://localhost/game/join/left/Ballerbude/{playerName}')))
+    }
+
+    def 'server adds link for joining the right team'() {
+        expect:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath('$._links.joinRight.href', is('http://localhost/game/join/right/Ballerbude/{playerName}')))
+    }
+
+    def 'server adds selfref'() {
+        expect:
+        mockMvc.perform(post("/game/solo/Ballerbude/deen")
+                .content("141839841293")
+                .contentType(TEXT_PLAIN))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath('$._links.self.href', is('http://localhost/game/Ballerbude')))
     }
 
 

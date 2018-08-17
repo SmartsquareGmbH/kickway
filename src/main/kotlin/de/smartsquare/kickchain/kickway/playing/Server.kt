@@ -12,11 +12,13 @@ class Server(val repository: GameRepository) : Spectatable {
         return this[name] ?: throw LobbyNotFoundException(name)
     }
 
-    fun createNewLobby(lobby: String, owner: String) {
+    fun createNewLobby(lobby: String, owner: String): Game {
         if (lobby.none()) throw IllegalArgumentException("A lobby must have a non-empty name")
         if (lobbies.containsKey(lobby)) throw LobbyAlreadyExistsException(lobby)
 
-        lobbies[lobby] = Game(owner)
+        val game = Game(owner)
+        lobbies[lobby] = game
+        return game
     }
 
     override fun spectate(lobbyName: String): Game = lobbies.getOrThrowException(lobbyName)

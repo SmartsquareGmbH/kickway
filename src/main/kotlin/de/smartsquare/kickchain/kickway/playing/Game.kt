@@ -1,8 +1,9 @@
 package de.smartsquare.kickchain.kickway.playing
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.springframework.hateoas.ResourceSupport
 
-data class Game(val owner: String) {
+data class Game(val owner: String) : ResourceSupport() {
 
     val teamLeft = Team(owner)
     val teamRight = Team()
