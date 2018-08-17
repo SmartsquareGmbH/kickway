@@ -68,13 +68,13 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
 
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-hateoas"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-hateoas"
 
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
 
@@ -82,13 +82,13 @@ dependencies {
 
     runtime "org.springframework.boot:spring-boot-devtools"
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 
     testImplementation "org.mock-server:mockserver-netty:$mockserverVersion"
     testImplementation "org.mock-server:mockserver-client-java:$mockserverVersion"
 
-    testCompile "org.spockframework:spock-core:$spockVersion"
-    testCompile "org.spockframework:spock-spring:$spockVersion"
+    testImplementation "org.spockframework:spock-core:$spockVersion"
+    testImplementation "org.spockframework:spock-spring:$spockVersion"
 }
 
 jacoco {
