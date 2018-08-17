@@ -66,7 +66,6 @@ class ServerSpecification extends Specification {
         error.message == 'A lobby must have a non-empty name'
     }
 
-
     def 'score team left'() {
         given:
         server.createNewLobby('Ballerbude', 'deen')
@@ -112,12 +111,12 @@ class ServerSpecification extends Specification {
         server.lobbies.isEmpty()
     }
 
-    def 'server throws exception if lobby is attempted to spectate a lobby that does not exists'() {
+    def 'server throws exception if lobby is attempted to spectate a lobby that does not exist'() {
         when:
         server.spectate('lobbywhichdoesnotexists')
         then:
         def error = thrown(RuntimeException)
-        error.message == 'A lobby with the name lobbywhichdoesnotexists does not exists'
+        error.message == 'A lobby with the name lobbywhichdoesnotexists does not exist'
     }
 
     def 'server returns list of joinable lobby with one player'() {
@@ -136,6 +135,25 @@ class ServerSpecification extends Specification {
 
         then:
         server.getJoinableLobbies().isEmpty()
+    }
+
+    def 'leave server'() {
+        given:
+        server.createNewLobby('Ballerbude', 'deen')
+        when:
+        server.joinLeft('Ballerbude', 'ruby')
+        server.leave('Ballerbude', 'ruby')
+        then:
+        server.lobbies['Ballerbude'].teamLeft.player == ['deen']
+    }
+
+    def 'server removes lobby if is empty'() {
+        given:
+        server.createNewLobby('Ballerbude', 'deen')
+        when:
+        server.leave('Ballerbude', 'deen')
+        then:
+        server.lobbies.isEmpty()
     }
 
 }

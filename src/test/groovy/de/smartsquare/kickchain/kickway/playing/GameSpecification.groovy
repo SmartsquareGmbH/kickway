@@ -50,4 +50,13 @@ class GameSpecification extends Specification {
         game.isFull()
     }
 
+    def 'game throws exception on duplicate name'() {
+        when:
+        game.teamRight.join('ruby')
+        game.teamRight.join('ruby')
+        then:
+        def error = thrown(RuntimeException)
+        error.message == "A player with the name ruby is already in-game"
+    }
+
 }

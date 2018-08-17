@@ -1,6 +1,7 @@
 package de.smartsquare.kickchain.kickway.playing
 
 data class Game(val owner: String) {
+
     val teamLeft = Team(owner)
     val teamRight = Team()
 
@@ -33,5 +34,7 @@ data class Game(val owner: String) {
     fun leftTeamWon(): Boolean = teamLeft.score == 10
 
     fun isFull(): Boolean = teamLeft.isFull() && teamRight.isFull()
+
+    fun isEmpty(): Boolean = teamRight.isEmpty() && teamLeft.isEmpty()
 
 }

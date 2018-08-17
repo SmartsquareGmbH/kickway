@@ -14,18 +14,29 @@ class Server(val repository: GameRepository) : Spectatable {
         lobbies[lobby] = Game(owner)
     }
 
-    override fun spectate(lobby: String): Game = lobbies[lobby]
-            ?: throw RuntimeException("A lobby with the name ${lobby} does not exists")
+    override fun spectate(lobby: String): Game = getLobbyWithNameOrThrowException(lobby)
 
-    fun joinLeft(lobby: String, name: String) {
-        val game = lobbies[lobby] ?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
-        game.teamLeft.join(name)
+    fun joinLeft(lobbyName: String, name: String) {
+        val lobby = getLobbyWithNameOrThrowException(lobbyName)
+        lobby.teamLeft.join(name)
     }
 
-    fun joinRight(lobby: String, name: String) {
-        val game = lobbies[lobby] ?: throw RuntimeException("A lobby with the name ${lobby} does not exist")
-        game.teamRight.join(name)
+    fun joinRight(lobbyName: String, name: String) {
+        val lobby = getLobbyWithNameOrThrowException(lobbyName)
+        lobby.teamRight.join(name)
     }
+
+    fun leave(lobbyName: String, name: String) {
+        val lobby = getLobbyWithNameOrThrowException(lobbyName)
+
+        lobby.teamLeft.leave(name)
+        lobby.teamRight.leave(name)
+
+        if(lobby.isEmpty()) lobbies.remove(lobbyName)
+    }
+
+    private fun getLobbyWithNameOrThrowException(name: String) = lobbies[name]
+            ?: throw RuntimeException("A lobby with the name ${name} does not exist")
 
     fun scoreTeamLeft(lobby: String) {
         lobbies[lobby]?.let {
