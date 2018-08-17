@@ -5,8 +5,9 @@ import org.springframework.stereotype.Component
 @Component
 class Server(val repository: GameRepository) : Spectatable {
 
-    private val lobbies: MutableMap<String, Game> = mutableMapOf()
     val joinableLobbyNames get() = lobbies.filterNot { (_, lobby) -> lobby.full }.keys.toList()
+
+    private val lobbies: MutableMap<String, Game> = mutableMapOf()
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun MutableMap<String, Game>.getOrThrowException(name: String): Game {
@@ -62,5 +63,4 @@ class Server(val repository: GameRepository) : Spectatable {
             lobbies[lobbyName] = lobbyWithIncrementedScore
         }
     }
-
 }

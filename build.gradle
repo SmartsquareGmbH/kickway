@@ -1,0 +1,124 @@
+buildscript {
+    ext {
+        gradleVersion = "4.9"
+        gradleVersionsVersion = "0.20.0"
+
+        kotlinVersion = "1.2.51"
+        springBootVersion = "2.0.4.RELEASE"
+
+        detektVersion = "1.0.0.RC8"
+        ktlintVersion = "0.26.0"
+        ktlintGradleVersion = "4.1.0"
+        codeNarcVersion = "1.2"
+        jacocoVersion = "0.8.1"
+
+        spockVersion = "1.1-groovy-2.4"
+        cglibVersion = "3.2.7"
+    }
+
+    repositories {
+        gradlePluginPortal()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion"
+
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+
+        classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
+        classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:$ktlintGradleVersion"
+    }
+}
+
+apply plugin: "groovy"
+apply plugin: "kotlin"
+apply plugin: "kotlin-kapt"
+apply plugin: "kotlin-jpa"
+apply plugin: "kotlin-spring"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "codenarc"
+apply plugin: "jacoco"
+
+group = 'de.smartsquare.kickchain'
+version = '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.matching { it.name.matches("compile.*Kotlin") }.all {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-hateoas"
+
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.6'
+
+    runtime group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.4.RELEASE'
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+
+    testCompile "org.spockframework:spock-core:$spockVersion"
+    testCompile "org.spockframework:spock-spring:$spockVersion"
+}
+
+jacoco {
+    toolVersion = jacocoVersion
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+detekt {
+    version = detektVersion
+
+    profile("main") {
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/config/detekt/detekt.yml"
+        output = "$buildDir/reports/detekt"
+    }
+}
+
+ktlint {
+    version = ktlintVersion
+    reporters = ["CHECKSTYLE"]
+}
+
+codenarc {
+    toolVersion = codeNarcVersion
+
+    configFile = file("$projectDir/config/codenarc/codenarc.xml")
+}
+
+gradle.projectsEvaluated {
+    test { finalizedBy jacocoTestReport }
+
+    compileKotlin.dependsOn processResources
+    check.dependsOn detektCheck
+}
+
+wrapper {
+    gradleVersion = project.gradleVersion
+}

@@ -53,5 +53,4 @@ class GameSpecification extends Specification {
         expect:
         game.joinRightTeam('ruby').leaveLeftTeam('deen').owner == 'ruby'
     }
-
 }

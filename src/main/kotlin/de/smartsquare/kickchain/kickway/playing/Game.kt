@@ -27,9 +27,9 @@ data class Game(val leftTeam: Team, val rightTeam: Team) : ResourceSupport() {
     val completed = leftTeamWon || rightTeamWon
 
     val owner: String
-        get () = leftTeam.players.firstOrNull()
-                ?: rightTeam.players.firstOrNull()
-                ?: throw IllegalStateException("No players found")
+        get() = leftTeam.players.firstOrNull()
+            ?: rightTeam.players.firstOrNull()
+            ?: throw IllegalStateException("No players found")
 
     fun scoreLeftTeam(): Game = if (completed.not()) {
         this.copy(leftTeam = leftTeam.score())
@@ -50,6 +50,4 @@ data class Game(val leftTeam: Team, val rightTeam: Team) : ResourceSupport() {
     fun leaveLeftTeam(name: String) = this.copy(leftTeam = leftTeam - name)
 
     fun leaveRightTeam(name: String) = this.copy(rightTeam = rightTeam - name)
-
-
 }

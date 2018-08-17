@@ -27,5 +27,4 @@ data class Team(val players: List<String>, val score: Int) {
 
     @JsonIgnore
     fun isEmpty(): Boolean = players.isEmpty()
-
 }

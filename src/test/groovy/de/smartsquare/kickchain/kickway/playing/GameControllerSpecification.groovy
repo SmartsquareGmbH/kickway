@@ -54,7 +54,7 @@ class GameControllerSpecification extends Specification {
     def 'server responds with bad request if no raspberry id is given'() {
         expect:
         mockMvc.perform(post('/game/solo/Ballerbude/deen'))
-                .andExpect(status().is(400))
+                .andExpect(status().isBadRequest())
     }
 
     def 'server responds conflict if the lobby already exists'() {
@@ -134,5 +134,4 @@ class GameControllerSpecification extends Specification {
         cleanup:
         server.lobbies.clear()
     }
-
 }

@@ -13,12 +13,11 @@ class SpectatorController(val server: Spectatable) {
 
     @GetMapping("/game/{lobbyName}")
     fun watch(@PathVariable("lobbyName") lobbyName: String): ResponseEntity<Game> {
-        try {
+        return try {
             val lobby = server.spectate(lobbyName)
-            return ResponseEntity.ok(lobby)
+            ResponseEntity.ok(lobby)
         } catch (e: LobbyNotFoundException) {
-            return ResponseEntity.notFound().build()
+            ResponseEntity.notFound().build()
         }
     }
-
 }

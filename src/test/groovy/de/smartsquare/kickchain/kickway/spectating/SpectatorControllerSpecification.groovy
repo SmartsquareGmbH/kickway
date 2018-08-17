@@ -42,5 +42,4 @@ class SpectatorControllerSpecification extends Specification {
                 .andExpect(jsonPath('$.leftTeam.score', is(0)))
                 .andExpect(jsonPath('$.owner', is('deen')))
     }
-
 }

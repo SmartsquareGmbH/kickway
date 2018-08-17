@@ -155,5 +155,4 @@ class ServerSpecification extends Specification {
         then:
         server.lobbies.isEmpty()
     }
-
 }

@@ -57,7 +57,6 @@ class WholeGameScenarioSpecification extends Specification {
 
         10.times { mockMvc.perform(patch('/game/score/left/Ballerbude').header('raspberry', '141839841293')) }
 
-
         then:
         mockMvc.perform(get("/game/Ballerbude"))
                 .andExpect(status().isNotFound())
@@ -82,9 +81,7 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
 
-
         cleanup:
         server.lobbies.clear()
     }
-
 }

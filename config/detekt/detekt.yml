@@ -1,0 +1,45 @@
+failFast: true
+
+comments:
+  CommentOverPrivateFunction:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+
+complexity:
+  LongParameterList:
+    active: false
+  StringLiteralDuplication:
+    active: false
+
+naming:
+  FunctionMaxLength:
+    active: false
+
+performance:
+  SpreadOperator:
+    active: false
+
+potential-bugs:
+  UnsafeCast:
+    active: false
+
+style:
+  DataClassContainsFunctions:
+    active: false
+  ExpressionBodySyntax:
+    active: false
+  ForbiddenComment:
+    values: 'FIXME:,STOPSHIP:'
+  FunctionOnlyReturningConstant:
+    active: false
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+  ThrowsCount:
+    active: false
+  UnusedPrivateMember:
+    active: false
