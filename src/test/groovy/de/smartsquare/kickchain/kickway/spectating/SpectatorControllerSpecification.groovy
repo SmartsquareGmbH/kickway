@@ -26,7 +26,7 @@ class SpectatorControllerSpecification extends Specification {
 
     def 'controller returns http not found if lobby doesnt exists'() {
         expect:
-        mockMvc.perform(get("/game/abc")).andExpect(status().isNotFound())
+        mockMvc.perform(get('/game/abc')).andExpect(status().isNotFound())
     }
 
     def 'controller returns necessary game information from server'() {
@@ -34,7 +34,7 @@ class SpectatorControllerSpecification extends Specification {
         server.lobbies['Ballerbude'] = new Game('deen')
 
         expect:
-        mockMvc.perform(get("/game/Ballerbude").accept(APPLICATION_JSON))
+        mockMvc.perform(get('/game/Ballerbude').accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$.rightTeam.players.length()', is(0)))
                 .andExpect(jsonPath('$.leftTeam.players[0]', is('deen')))

@@ -33,7 +33,7 @@ class GameSpecification extends Specification {
 
     def 'lobby is full if four players joined'() {
         expect:
-        game.joinLeftTeam("ruby").joinRightTeam("skonair").joinRightTeam("drs").full
+        game.joinLeftTeam('ruby').joinRightTeam('skonair').joinRightTeam('drs').full
     }
 
     def 'game throws exception on duplicate name'() {
@@ -41,7 +41,7 @@ class GameSpecification extends Specification {
         game.joinRightTeam('ruby').joinRightTeam('ruby')
         then:
         def error = thrown(RuntimeException)
-        error.message == "The player ruby already joined the lobby"
+        error.message == 'The player ruby already joined the lobby'
     }
 
     def 'first player of left team is owner by default'() {

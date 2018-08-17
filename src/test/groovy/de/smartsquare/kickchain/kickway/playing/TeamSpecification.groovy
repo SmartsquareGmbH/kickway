@@ -16,7 +16,7 @@ class TeamSpecification extends Specification {
         team + 'deen' + 'ruby' + 'skonair'
         then:
         def error = thrown(RuntimeException)
-        error.message == "The team is full"
+        error.message == 'The team is full'
     }
 
     def 'team throws exception if a player with a empty name attempts to join'() {

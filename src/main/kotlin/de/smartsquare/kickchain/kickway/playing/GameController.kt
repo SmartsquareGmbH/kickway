@@ -18,7 +18,7 @@ class GameController(private val server: Server) {
     private val authorization = HashMap<String, String>()
 
     @PostMapping("/game/solo/{lobbyName}/{ownerName}")
-    fun create(@PathVariable("lobbyName") lobbyName: String, @PathVariable("ownerName") ownerName: String, @NotEmpty @RequestBody raspberry: String): ResponseEntity<Any> {
+    fun create(@PathVariable("lobbyName") lobbyName: String, @PathVariable("ownerName") ownerName: String, @NotEmpty @RequestHeader raspberry: String): ResponseEntity<Any> {
         try {
             server.createNewLobby(lobbyName, ownerName)
         } catch (e: IllegalArgumentException) {
@@ -58,7 +58,7 @@ class GameController(private val server: Server) {
     }
 
     @PatchMapping("/game/score/left/{lobbyName}")
-    fun scoreLeft(@PathVariable("lobbyName") lobbyName: String, @NotEmpty @RequestBody raspberry: String): ResponseEntity<Any> {
+    fun scoreLeft(@PathVariable("lobbyName") lobbyName: String, @NotEmpty @RequestHeader raspberry: String): ResponseEntity<Any> {
         authorization[raspberry] ?: return ResponseEntity.status(UNAUTHORIZED).build()
 
         server.scoreLeftTeam(lobbyName)
@@ -67,7 +67,7 @@ class GameController(private val server: Server) {
 
 
     @PatchMapping("/game/score/right/{lobbyName}")
-    fun scoreRight(@PathVariable("lobbyName") lobbyName: String, @NotEmpty @RequestBody raspberry: String): ResponseEntity<Any> {
+    fun scoreRight(@PathVariable("lobbyName") lobbyName: String, @NotEmpty @RequestHeader raspberry: String): ResponseEntity<Any> {
         authorization[raspberry] ?: return ResponseEntity.status(UNAUTHORIZED).build()
 
         server.scoreRightTeam(lobbyName)
