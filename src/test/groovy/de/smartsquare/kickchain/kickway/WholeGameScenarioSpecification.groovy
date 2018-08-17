@@ -22,6 +22,10 @@ class WholeGameScenarioSpecification extends Specification {
     @Autowired
     Server server
 
+    void cleanup() {
+        server.lobbies.clear()
+    }
+
     def 'spectate game after third goal'() {
         when:
         mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
@@ -42,9 +46,6 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.rightTeam.score', is(0)))
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'server removes lobby after game is over'() {
@@ -60,9 +61,6 @@ class WholeGameScenarioSpecification extends Specification {
         then:
         mockMvc.perform(get("/game/Ballerbude"))
                 .andExpect(status().isNotFound())
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'play soloq'() {
@@ -80,8 +78,5 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.rightTeam.score', is(0)))
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
-
-        cleanup:
-        server.lobbies.clear()
     }
 }

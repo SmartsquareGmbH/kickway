@@ -24,6 +24,10 @@ class SpectatorControllerSpecification extends Specification {
     @Autowired
     Server server
 
+    void cleanup() {
+        server.lobbies.clear()
+    }
+
     def 'controller returns http not found if lobby doesnt exists'() {
         expect:
         mockMvc.perform(get('/game/abc')).andExpect(status().isNotFound())

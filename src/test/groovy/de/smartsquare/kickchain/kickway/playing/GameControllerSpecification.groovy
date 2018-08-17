@@ -25,6 +25,10 @@ class GameControllerSpecification extends Specification {
     @Autowired
     GameController gameController
 
+    void cleanup() {
+        server.lobbies.clear()
+    }
+
     def 'rest endpoint adds new lobby on create'() {
         when:
         mockMvc.perform(post('/game/solo/Ballerbude/deen')
@@ -33,9 +37,6 @@ class GameControllerSpecification extends Specification {
 
         then:
         server.lobbies['Ballerbude'].leftTeam.players == ['deen']
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'rest endpoint authorizes raspberry for the lobby'() {
@@ -46,9 +47,6 @@ class GameControllerSpecification extends Specification {
 
         then:
         gameController.authorization['141839841293'] == 'Ballerbude'
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'server responds with bad request if no raspberry id is given'() {
@@ -77,10 +75,6 @@ class GameControllerSpecification extends Specification {
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinLeft.href', is('http://localhost/game/join/left/Ballerbude/{playerName}')))
-
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'server adds link for joining the right team on create'() {
@@ -89,9 +83,6 @@ class GameControllerSpecification extends Specification {
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinRight.href', is('http://localhost/game/join/right/Ballerbude/{playerName}')))
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'server adds selfref on create'() {
@@ -100,9 +91,6 @@ class GameControllerSpecification extends Specification {
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.self.href', is('http://localhost/game/Ballerbude')))
-
-        cleanup:
-        server.lobbies.clear()
     }
 
     def 'score left team'() {
@@ -115,9 +103,6 @@ class GameControllerSpecification extends Specification {
 
         then:
         server.lobbies['Ballerbude'].leftTeam.score == 1
-
-        cleanup:
-        server.lobbies.clear()
     }
 
 
@@ -130,8 +115,5 @@ class GameControllerSpecification extends Specification {
         mockMvc.perform(patch('/game/score/left/Ballerbude')
                 .header('raspberry', '1337'))
                 .andExpect(status().isUnauthorized())
-
-        cleanup:
-        server.lobbies.clear()
     }
 }
