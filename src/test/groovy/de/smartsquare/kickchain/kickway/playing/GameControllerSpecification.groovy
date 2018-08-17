@@ -73,6 +73,9 @@ class GameControllerSpecification extends Specification {
                 .content("141839841293")
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isConflict())
+
+        cleanup:
+        server.lobbies.clear()
     }
 
     def 'server adds link for joining the left team'() {
@@ -82,6 +85,10 @@ class GameControllerSpecification extends Specification {
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinLeft.href', is('http://localhost/game/join/left/Ballerbude/{playerName}')))
+
+
+        cleanup:
+        server.lobbies.clear()
     }
 
     def 'server adds link for joining the right team'() {
@@ -91,6 +98,9 @@ class GameControllerSpecification extends Specification {
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinRight.href', is('http://localhost/game/join/right/Ballerbude/{playerName}')))
+
+        cleanup:
+        server.lobbies.clear()
     }
 
     def 'server adds selfref'() {
@@ -100,6 +110,9 @@ class GameControllerSpecification extends Specification {
                 .contentType(TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.self.href', is('http://localhost/game/Ballerbude')))
+
+        cleanup:
+        server.lobbies.clear()
     }
 
 
