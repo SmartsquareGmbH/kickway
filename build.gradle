@@ -3,12 +3,12 @@ buildscript {
         gradleVersion = "4.9"
         gradleVersionsVersion = "0.20.0"
 
-        kotlinVersion = "1.2.51"
+        kotlinVersion = "1.2.61"
         springBootVersion = "2.0.4.RELEASE"
 
         detektVersion = "1.0.0.RC8"
-        ktlintVersion = "0.26.0"
-        ktlintGradleVersion = "4.1.0"
+        ktlintVersion = "0.27.0"
+        ktlintGradleVersion = "5.0.0"
         codeNarcVersion = "1.2"
         jacocoVersion = "0.8.1"
 
@@ -16,7 +16,7 @@ buildscript {
 
         spockVersion = "1.1-groovy-2.4"
 
-        mockserverVersion = "3.10.8"
+        mockserverVersion = "5.4.1"
     }
 
     repositories {
@@ -33,6 +33,7 @@ buildscript {
 
         classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
         classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:$ktlintGradleVersion"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsVersion"
     }
 }
 
@@ -42,13 +43,15 @@ apply plugin: "kotlin-kapt"
 apply plugin: "kotlin-jpa"
 apply plugin: "kotlin-kapt"
 apply plugin: "kotlin-spring"
-apply plugin: "org.springframework.boot"
-apply plugin: "io.spring.dependency-management"
 
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "com.github.ben-manes.versions"
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: "codenarc"
 apply plugin: "jacoco"
+
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
 
 group = "de.smartsquare.kickchain"
 version = "1.0.0"
@@ -126,7 +129,6 @@ codenarc {
 gradle.projectsEvaluated {
     test { finalizedBy jacocoTestReport }
 
-    compileKotlin.dependsOn processResources
     check.dependsOn detektCheck
 }
 
