@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
 import static org.hamcrest.CoreMatchers.is
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -115,5 +116,18 @@ class GameControllerSpecification extends Specification {
         mockMvc.perform(patch('/game/score/left/Ballerbude')
                 .header('raspberry', '1337'))
                 .andExpect(status().isUnauthorized())
+    }
+
+    def 'leave left team'() {
+        given:
+        mockMvc.perform(post('/game/Ballerbude/deen')
+                .header('raspberry', '1337'))
+
+        when:
+        mockMvc.perform(patch('/game/join/left/Ballerbude/ruby'))
+        mockMvc.perform(delete('/game/leave/Ballerbude/ruby'))
+
+        then:
+        server.lobbies['Ballerbude'].leftTeam.players == ['deen']
     }
 }

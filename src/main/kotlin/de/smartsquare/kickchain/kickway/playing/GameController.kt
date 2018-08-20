@@ -8,11 +8,7 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.NotEmpty
 
 @RestController
@@ -99,6 +95,15 @@ class GameController(private val server: Server) {
         authorization[raspberry] ?: return ResponseEntity.status(UNAUTHORIZED).build()
 
         server.scoreRightTeam(lobbyName)
+        return ResponseEntity.ok().build()
+    }
+
+    @DeleteMapping("/game/leave/{lobbyName}/{playerName}")
+    fun leaveTeam(
+        @PathVariable("lobbyName") lobbyName: String,
+        @PathVariable("playerName") playerName: String
+    ): ResponseEntity<Any> {
+        server.leave(lobbyName, playerName)
         return ResponseEntity.ok().build()
     }
 
