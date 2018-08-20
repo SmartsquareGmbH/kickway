@@ -20,7 +20,7 @@ class GameController(private val server: Server) {
 
     private val authorization = HashMap<String, String>()
 
-    @PostMapping("/game/solo/{lobbyName}/{ownerName}")
+    @PostMapping("/game/{lobbyName}/{ownerName}")
     fun create(
         @PathVariable("lobbyName") lobbyName: String,
         @PathVariable("ownerName") ownerName: String,

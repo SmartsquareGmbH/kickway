@@ -29,7 +29,7 @@ class WholeGameScenarioSpecification extends Specification {
 
     def 'spectate game after third goal'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
 
         mockMvc.perform(patch('/game/join/left/Ballerbude/ruby'))
         mockMvc.perform(patch('/game/join/right/Ballerbude/skonair'))
@@ -51,7 +51,7 @@ class WholeGameScenarioSpecification extends Specification {
 
     def 'server removes lobby after game is over'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
 
         mockMvc.perform(patch('/game/join/left/Ballerbude/ruby'))
         mockMvc.perform(patch('/game/join/right/Ballerbude/skonair'))
@@ -66,7 +66,7 @@ class WholeGameScenarioSpecification extends Specification {
 
     def 'play soloq'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
         mockMvc.perform(patch('/game/join/right/Ballerbude/skonair'))
 
         3.times { mockMvc.perform(patch('/game/score/left/Ballerbude').header('raspberry', '141839841293')) }
@@ -83,7 +83,7 @@ class WholeGameScenarioSpecification extends Specification {
 
     def 'server returns conflict if a player is already in game'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
 
         then:
         mockMvc.perform(patch('/game/join/left/Ballerbude/deen'))

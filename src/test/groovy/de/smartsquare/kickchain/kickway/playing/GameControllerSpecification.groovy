@@ -31,7 +31,7 @@ class GameControllerSpecification extends Specification {
 
     def 'rest endpoint adds new lobby on create'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
 
@@ -41,7 +41,7 @@ class GameControllerSpecification extends Specification {
 
     def 'rest endpoint authorizes raspberry for the lobby'() {
         when:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
 
@@ -51,17 +51,17 @@ class GameControllerSpecification extends Specification {
 
     def 'server responds with bad request if no raspberry id is given'() {
         expect:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen'))
+        mockMvc.perform(post('/game/Ballerbude/deen'))
                 .andExpect(status().isBadRequest())
     }
 
     def 'server responds conflict if the lobby already exists'() {
         given:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
 
         expect:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isConflict())
 
@@ -71,7 +71,7 @@ class GameControllerSpecification extends Specification {
 
     def 'server adds link for joining the left team on create'() {
         expect:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinLeft.href', is('http://localhost/game/join/left/Ballerbude/{playerName}')))
@@ -79,7 +79,7 @@ class GameControllerSpecification extends Specification {
 
     def 'server adds link for joining the right team on create'() {
         expect:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.joinRight.href', is('http://localhost/game/join/right/Ballerbude/{playerName}')))
@@ -87,7 +87,7 @@ class GameControllerSpecification extends Specification {
 
     def 'server adds selfref on create'() {
         expect:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$._links.self.href', is('http://localhost/game/Ballerbude')))
@@ -95,7 +95,7 @@ class GameControllerSpecification extends Specification {
 
     def 'score left team'() {
         given:
-        mockMvc.perform(post('/game/solo/Ballerbude/deen')
+        mockMvc.perform(post('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
         when:
         mockMvc.perform(patch('/game/score/left/Ballerbude')
@@ -108,7 +108,7 @@ class GameControllerSpecification extends Specification {
 
     def 'score left team will be denied if the raspberry id does not match'() {
         given:
-        mockMvc.perform(patch('/game/solo/Ballerbude/deen')
+        mockMvc.perform(patch('/game/Ballerbude/deen')
                 .header('raspberry', '141839841293'))
 
         expect:
