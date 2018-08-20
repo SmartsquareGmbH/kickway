@@ -11,10 +11,9 @@ import static org.mockserver.model.HttpResponse.response
 
 class BlockchainStructureSpecification extends Specification {
 
-    def client = new RestTemplate()
-
     @Shared
     ClientAndServer server = new ClientAndServer()
+    def client = new RestTemplate()
 
     def setupSpec() {
         server.when(request()
@@ -32,6 +31,6 @@ class BlockchainStructureSpecification extends Specification {
 
     def 'parse blockchain from json'() {
         expect:
-        client.getForObject("http://localhost:${server.port}/chain", Blockchain.class).blocks.size() == 10
+        client.getForObject("http://localhost:${server.localPort}/chain", Blockchain.class).blocks.size() == 10
     }
 }
