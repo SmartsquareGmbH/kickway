@@ -3,7 +3,7 @@ buildscript {
         gradleVersion = "4.9"
         gradleVersionsVersion = "0.20.0"
 
-        kotlinVersion = "1.2.61"
+        kotlinVersion = "1.2.51"
         springBootVersion = "2.0.4.RELEASE"
 
         detektVersion = "1.0.0.RC8"
