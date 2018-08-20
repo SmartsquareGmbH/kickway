@@ -80,14 +80,4 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
     }
-
-    def 'server returns conflict if a player is already in game'() {
-        when:
-        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
-
-        then:
-        mockMvc.perform(patch('/game/join/left/Ballerbude/deen'))
-                .andExpect(status().isConflict())
-                .andExpect(content().string("The player deen already joined the lobby"))
-    }
 }

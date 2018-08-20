@@ -10,6 +10,7 @@ import static org.hamcrest.CoreMatchers.is
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -129,5 +130,15 @@ class GameControllerSpecification extends Specification {
 
         then:
         server.lobbies['Ballerbude'].leftTeam.players == ['deen']
+    }
+
+    def 'server returns conflict if a player is already in game'() {
+        when:
+        mockMvc.perform(post('/game/Ballerbude/deen').header('raspberry', '141839841293'))
+
+        then:
+        mockMvc.perform(patch('/game/join/left/Ballerbude/deen'))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("The player deen already joined the lobby"))
     }
 }
