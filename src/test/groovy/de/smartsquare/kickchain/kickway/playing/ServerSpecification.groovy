@@ -155,4 +155,14 @@ class ServerSpecification extends Specification {
         then:
         server.lobbies.isEmpty()
     }
+
+    def 'server throws exception if the playergame is already used'() {
+        setup:
+        server.createNewLobby('Ballerbude', 'deen')
+        when:
+        server.joinRight('Ballerbude', 'deen')
+        then:
+        def error = thrown(PlayerAlreadyExistsException)
+        error.message == 'The player deen already joined the lobby'
+    }
 }

@@ -26,4 +26,8 @@ class TeamSpecification extends Specification {
         def error = thrown(RuntimeException)
         error.message == 'A player must have a non-empty name'
     }
+
+    def 'team has player infix'() {
+        expect: (team + 'deen').hasPlayer('deen')
+    }
 }

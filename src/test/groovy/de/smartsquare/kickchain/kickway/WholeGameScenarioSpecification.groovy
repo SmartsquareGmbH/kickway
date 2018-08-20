@@ -9,6 +9,7 @@ import spock.lang.Specification
 
 import static org.hamcrest.CoreMatchers.is
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -78,5 +79,15 @@ class WholeGameScenarioSpecification extends Specification {
                 .andExpect(jsonPath('$.rightTeam.score', is(0)))
                 .andExpect(jsonPath('$.leftTeam.score', is(3)))
                 .andExpect(jsonPath('$.owner', is('deen')))
+    }
+
+    def 'server returns conflict if a player is already in game'() {
+        when:
+        mockMvc.perform(post('/game/solo/Ballerbude/deen').header('raspberry', '141839841293'))
+
+        then:
+        mockMvc.perform(patch('/game/join/left/Ballerbude/deen'))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("The player deen already joined the lobby"))
     }
 }

@@ -58,6 +58,8 @@ class GameController(private val server: Server) {
             return ResponseEntity.ok().build()
         } catch (e: LobbyNotFoundException) {
             return ResponseEntity.notFound().build()
+        } catch (e: PlayerAlreadyExistsException) {
+            return ResponseEntity(e.message, CONFLICT)
         }
     }
 

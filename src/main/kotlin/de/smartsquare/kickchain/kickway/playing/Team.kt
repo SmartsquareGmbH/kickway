@@ -18,6 +18,10 @@ data class Team(val players: List<String>, val score: Int) {
 
     operator fun minus(name: String): Team = this.copy(players = players - name)
 
+    infix fun hasPlayer(name: String): Boolean {
+        return players.contains(name)
+    }
+
     fun score(): Team {
         return this.copy(score = score + 1)
     }

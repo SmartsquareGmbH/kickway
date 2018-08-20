@@ -43,9 +43,15 @@ data class Game(val leftTeam: Team, val rightTeam: Team) : ResourceSupport() {
         this
     }
 
-    fun joinLeftTeam(name: String) = this.copy(leftTeam = leftTeam + name)
+    fun joinLeftTeam(name: String): Game {
+        if (rightTeam hasPlayer name) throw PlayerAlreadyExistsException(name)
+        return this.copy(leftTeam = leftTeam + name)
+    }
 
-    fun joinRightTeam(name: String) = this.copy(rightTeam = rightTeam + name)
+    fun joinRightTeam(name: String): Game {
+        if (leftTeam hasPlayer name) throw PlayerAlreadyExistsException(name)
+        return this.copy(rightTeam = rightTeam + name)
+    }
 
     fun leaveLeftTeam(name: String) = this.copy(leftTeam = leftTeam - name)
 
