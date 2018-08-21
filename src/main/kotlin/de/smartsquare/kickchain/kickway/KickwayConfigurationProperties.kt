@@ -20,15 +20,20 @@ class KickwayConfigurationProperties {
 
     class Kickchain {
 
+        val authorization = Authorization()
+
         @get:URL
         @get:NotBlank
         var url by Delegates.notNull<String>()
 
-        @get:NotBlank
-        var name by Delegates.notNull<String>()
 
-        @get:NotBlank
-        var password by Delegates.notNull<String>()
+        class Authorization {
 
+            @get:NotBlank
+            var name by Delegates.notNull<String>()
+
+            @get:NotBlank
+            var password by Delegates.notNull<String>()
+        }
     }
 }

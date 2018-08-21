@@ -10,6 +10,6 @@ class HttpBasicAuthConfiguration(private val properties: KickwayConfigurationPro
 
     @Bean
     fun restTemplateWithBasicAuth(restTemplateBuilder: RestTemplateBuilder): RestTemplate {
-        return restTemplateBuilder.basicAuthorization(properties.kickchain.name, properties.kickchain.password).build()
+        return restTemplateBuilder.basicAuthorization(properties.kickchain.authorization.name, properties.kickchain.authorization.password).build()
     }
 }
