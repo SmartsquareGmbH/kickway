@@ -3,4 +3,4 @@ task:
     image: gradle:jdk8
     cpu: 4
     memory: 10G
-  script: gradle test
+  script: ./gradlew build
