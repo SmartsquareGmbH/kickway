@@ -14,6 +14,6 @@ class KickchainRepository(
     override fun fetch(): Blockchain = try {
         restTemplate.getForObject("${config.kickchain.url}/chain", Blockchain::class.java)
     } catch (restException: RestClientException) {
-        throw KickchainException(restException.mostSpecificCause.message ?: "Internal Error")
+        throw KickchainException(restException, restException.mostSpecificCause.message ?: "Internal Error")
     } ?: throw KickchainException("The kickchain response could not be parsed.")
 }

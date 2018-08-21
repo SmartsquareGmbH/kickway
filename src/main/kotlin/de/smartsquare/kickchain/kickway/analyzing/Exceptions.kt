@@ -1,6 +1,10 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
-class KickchainException(message: String) : RuntimeException(message)
+@Suppress("UtilityClassWithPublicConstructor")
+class KickchainException : RuntimeException {
+    constructor(cause: Exception, message: String) : super(message, cause)
+    constructor(message: String) : super(message)
+}
 
 class UnknownPlayerException(val name: String) : RuntimeException() {
     override val message: String?
