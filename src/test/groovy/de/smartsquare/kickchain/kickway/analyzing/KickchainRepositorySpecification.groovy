@@ -55,7 +55,7 @@ class KickchainRepositorySpecification extends Specification {
 
         then:
         def error = thrown(KickchainException)
-        error.message == 'org.springframework.web.client.HttpServerErrorException: 500 Internal Server Error'
+        error.message == '500 Internal Server Error'
     }
 
     def 'repository throws kickchain exception if the response is invalid'() {
