@@ -54,7 +54,6 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
             }
         }.topTen()
 
-
     fun findStatisticsOfPlayer(name: String): PlayerStatistic {
         val games: List<Pair<String, Int>> = findAllNonNullGames()
             .flatMap {
