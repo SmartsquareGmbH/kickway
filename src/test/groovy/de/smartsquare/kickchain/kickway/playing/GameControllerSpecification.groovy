@@ -107,7 +107,6 @@ class GameControllerSpecification extends Specification {
         server.lobbies['Ballerbude'].leftTeam.score == 1
     }
 
-
     def 'score left team will be denied if the raspberry id does not match'() {
         given:
         mockMvc.perform(patch('/game/Ballerbude/deen')

@@ -23,5 +23,12 @@ class KickwayConfigurationProperties {
         @get:URL
         @get:NotBlank
         var url by Delegates.notNull<String>()
+
+        @get:NotBlank
+        var name by Delegates.notNull<String>()
+
+        @get:NotBlank
+        var password by Delegates.notNull<String>()
+
     }
 }
