@@ -69,9 +69,11 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
         }
 
         val averageGoalsPerGame = games.sumBy { (_, goals) -> goals } / games.size
-        val winRate: Double = games.filter { (_, goals) -> goals == 10 }.size.toDouble().div(games.size)
+        val totalNumberOfWins = games.filter { (_, goals) -> goals == 10 }.size
+        val totalNumberOfLosses = games.size - totalNumberOfWins
+        val winRate: Double = totalNumberOfWins.toDouble().div(games.size)
         val totalCrawls = games.filter { (_, goals) -> goals == 0 }.size
 
-        return PlayerStatistic(averageGoalsPerGame, winRate, totalCrawls)
+        return PlayerStatistic(averageGoalsPerGame, winRate, totalCrawls, totalNumberOfWins, totalNumberOfLosses)
     }
 }

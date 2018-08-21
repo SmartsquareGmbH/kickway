@@ -95,4 +95,24 @@ class BlockchainAnalyzerSpecification extends Specification {
         error.message == 'The kickchain contains no games associated with the player deen'
     }
 
+    def 'total wins'() {
+        given:
+        blockchainRepositoryMock.fetch() >> aBlockchain()
+                .where('deen').played(10).to(1).against('ruby')
+                .finalizedBy('skonair').played(10).to(0).against('deen')
+
+        expect:
+        blockchainAnalyzer.findStatisticsOfPlayer('deen').totalWins == 1
+    }
+
+    def 'total losses'() {
+        given:
+        blockchainRepositoryMock.fetch() >> aBlockchain()
+                .where('deen').played(10).to(1).against('ruby')
+                .finalizedBy('skonair').played(10).to(0).against('deen')
+
+        expect:
+        blockchainAnalyzer.findStatisticsOfPlayer('deen').totalLosses == 1
+    }
+
 }
