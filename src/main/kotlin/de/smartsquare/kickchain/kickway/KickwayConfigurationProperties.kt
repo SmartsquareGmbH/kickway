@@ -26,7 +26,6 @@ class KickwayConfigurationProperties {
         @get:NotBlank
         var url by Delegates.notNull<String>()
 
-
         class Authorization {
 
             @get:NotBlank
