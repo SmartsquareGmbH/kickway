@@ -1,0 +1,6 @@
+task:
+  container:
+    image: gradle:jdk8
+    cpu: 4
+    memory: 10G
+  script: gradle test
