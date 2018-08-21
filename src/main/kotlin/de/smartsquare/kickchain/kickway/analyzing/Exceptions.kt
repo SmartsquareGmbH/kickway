@@ -1,9 +1,6 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
-class KickchainException : RuntimeException {
-    constructor(cause: Exception) : super(cause)
-    constructor(message: String) : super(message)
-}
+class KickchainException(message: String) : RuntimeException(message)
 
 class UnknownPlayerException(val name: String) : RuntimeException() {
     override val message: String?
