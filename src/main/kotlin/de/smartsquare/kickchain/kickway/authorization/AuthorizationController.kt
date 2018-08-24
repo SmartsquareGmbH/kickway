@@ -1,56 +1,56 @@
 package de.smartsquare.kickchain.kickway.authorization
 
-import de.smartsquare.kickchain.kickway.authorization.Authorization.Companion.unauthorized
+import org.springframework.http.HttpStatus.CONFLICT
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 class AuthorizationController(private val authorizationRepository: AuthorizationRepository) {
 
-    @GetMapping("/authorization")
-    fun isAuthorized(
-        @RequestHeader("name") name: String,
-        @RequestHeader("deviceId") deviceId: String
-    ): ResponseEntity<Any> {
-        if (name.isBlank().or(deviceId.isBlank())) return ResponseEntity.badRequest().build()
-
-        return authorizationRepository.findByDeviceId(deviceId)
-            .orElse(unauthorized())
-            .let { if (it.name == name) ResponseEntity.ok() else ResponseEntity.status(UNAUTHORIZED) }.build()
-    }
-
     @PostMapping("/authorization")
     fun authorize(
-        @RequestHeader("name") name: String,
-        @RequestHeader("deviceId") deviceId: String
+        @Valid @RequestBody input: AuthorizationForm,
+        bindingResult: BindingResult
     ): ResponseEntity<Any> {
-        if (name.isBlank().or(deviceId.isBlank())) return ResponseEntity.badRequest().build()
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build()
+        }
 
-        return if (authorizationRepository.findByName(name).isPresent) {
-            ResponseEntity.status(UNAUTHORIZED)
+        val authorizationWithSameName: Authorization? = authorizationRepository.findByName(input.name).orElse(null)
+
+        return if (authorizationWithSameName != null) {
+            if (authorizationWithSameName.deviceId == input.deviceId) {
+                ResponseEntity.ok().build()
+            } else {
+                ResponseEntity.status(CONFLICT).build()
+            }
         } else {
-            authorizationRepository.save(Authorization(deviceId, name))
-            ResponseEntity.ok()
-        }.build()
+            authorizationRepository.save(Authorization(input.deviceId, input.name))
+
+            ResponseEntity.ok().build()
+        }
     }
 
     @DeleteMapping("/authorization")
     fun unauthorize(
-        @RequestHeader("name") name: String,
-        @RequestHeader("deviceId") deviceId: String
-    ): ResponseEntity<Any> =
-        if (authorizationRepository.findByDeviceId(deviceId)
-                .orElse(unauthorized())
-                .name == name
-        ) {
-            authorizationRepository.deleteById(deviceId)
-            ResponseEntity.ok()
+        @Valid @RequestBody input: AuthorizationForm,
+        bindingResult: BindingResult
+    ): ResponseEntity<Any> {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build()
+        }
+
+        return if (authorizationRepository.findByDeviceIdAndName(input.deviceId, input.name).isPresent) {
+            authorizationRepository.deleteById(input.deviceId)
+            ResponseEntity.ok().build()
         } else {
-            ResponseEntity.status(UNAUTHORIZED)
-        }.build()
+            ResponseEntity.status(UNAUTHORIZED).build()
+        }
+    }
 }

@@ -7,6 +7,6 @@ import java.util.Optional
 @Repository
 interface AuthorizationRepository : CrudRepository<Authorization, String> {
 
-    fun findByDeviceId(deviceId: String): Optional<Authorization>
     fun findByName(name: String): Optional<Authorization>
+    fun findByDeviceIdAndName(id: String, name: String): Optional<Authorization>
 }
