@@ -1,6 +1,6 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
-import de.smartsquare.kickchain.kickway.KickwayConfigurationProperties
+import de.smartsquare.kickchain.kickway.ConfigurationProperties
 import org.mockserver.integration.ClientAndServer
 import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
@@ -18,7 +18,7 @@ class KickchainRepositorySpecification extends Specification {
     def repository
 
     def setup() {
-        def config = new KickwayConfigurationProperties()
+        def config = new ConfigurationProperties()
         config.kickchain.url = "http://localhost:$server.localPort"
 
         repository = new KickchainRepository(new RestTemplate(), config)

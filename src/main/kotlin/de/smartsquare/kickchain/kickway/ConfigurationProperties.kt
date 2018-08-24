@@ -7,12 +7,12 @@ import org.springframework.validation.annotation.Validated
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
-import kotlin.properties.Delegates
+import kotlin.properties.Delegates.notNull
 
 @Validated
 @Component
 @ConfigurationProperties(prefix = "kickway")
-class KickwayConfigurationProperties {
+class ConfigurationProperties {
 
     @Valid
     @NotNull
@@ -24,15 +24,15 @@ class KickwayConfigurationProperties {
 
         @get:URL
         @get:NotBlank
-        var url by Delegates.notNull<String>()
+        var url by notNull<String>()
 
         class Authorization {
 
             @get:NotBlank
-            var name by Delegates.notNull<String>()
+            var name by notNull<String>()
 
             @get:NotBlank
-            var password by Delegates.notNull<String>()
+            var password by notNull<String>()
         }
     }
 }

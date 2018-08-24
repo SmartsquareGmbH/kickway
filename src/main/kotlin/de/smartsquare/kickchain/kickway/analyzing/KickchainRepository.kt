@@ -1,6 +1,6 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
-import de.smartsquare.kickchain.kickway.KickwayConfigurationProperties
+import de.smartsquare.kickchain.kickway.ConfigurationProperties
 import org.springframework.stereotype.Repository
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate
 @Repository
 class KickchainRepository(
     private val restTemplate: RestTemplate,
-    private val config: KickwayConfigurationProperties
+    private val config: ConfigurationProperties
 ) : BlockchainRepository {
 
     override fun fetch(): Blockchain = try {
