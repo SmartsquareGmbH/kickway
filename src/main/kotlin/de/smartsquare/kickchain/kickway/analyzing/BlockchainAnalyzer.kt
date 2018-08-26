@@ -10,8 +10,11 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
     @Suppress("NOTHING_TO_INLINE")
     private inline fun List<Pair<String, Int>>.topTen() =
         this.groupBy { (playerName) -> playerName }
-            .mapValues { (_, scores) -> scores.sumBy { (_, score) -> score } }
-            .toList().sortedByDescending { (_, goals) -> goals }.take(10).map { it.first }
+            .mapValues { (_, goalsByName) -> goalsByName.sumBy { (_, goals) -> goals } }
+            .toList()
+            .sortedByDescending { (_, goals) -> goals }
+            .take(10)
+            .map { (name, goals) -> Player(name, goals) }
 
     fun findTopTenSoloQPlayers() = findAllNonNullGames()
         .filter { it.team1.players.size == 1 && it.team2.players.size == 1 }
@@ -36,7 +39,7 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
     fun findTopTenFlexQPlayers() = findAllNonNullGames()
         .filter {
             it.team1.players.size == 2 && it.team2.players.size == 1 ||
-                    it.team1.players.size == 1 && it.team2.players.size == 2
+                it.team1.players.size == 1 && it.team2.players.size == 2
         }
         .flatMap {
             if (it.team1.players.size == 2) {
