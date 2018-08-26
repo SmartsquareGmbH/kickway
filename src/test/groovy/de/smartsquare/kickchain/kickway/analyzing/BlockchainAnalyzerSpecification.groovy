@@ -25,11 +25,11 @@ class BlockchainAnalyzerSpecification extends Specification {
 
         expect:
         blockchainAnalyzer.findTopTenSoloQPlayers() == [
-                new Player('deen', 44), new Player('ruby', 11),
-                new Player('skonair', 10), new Player('alexn', 10),
-                new Player('danielr', 10), new Player('alexr', 10),
-                new Player('marco', 10), new Player('drs', 10),
-                new Player('natascha', 8), new Player('saschar', 5)
+                new Player('deen', 4, 44), new Player('skonair', 1, 10),
+                new Player('alexn', 1, 10), new Player('danielr', 1, 10),
+                new Player('alexr', 1, 10), new Player('marco', 1, 10),
+                new Player('drs', 1, 10), new Player('ruby', 0, 11),
+                new Player('natascha', 0, 8), new Player('saschar', 0, 5)
         ]
     }
 
@@ -44,11 +44,11 @@ class BlockchainAnalyzerSpecification extends Specification {
 
         expect:
         blockchainAnalyzer.findTopTenDuoQPlayers() == [
-                new Player('deen', 30), new Player('ruby', 20),
-                new Player('drs', 13), new Player('marco', 10),
-                new Player('natascha', 10), new Player('juri', 10),
-                new Player('tim', 10), new Player('samy', 6),
-                new Player('lilly', 6), new Player('skonair', 3)
+                new Player('deen', 3, 30), new Player('ruby', 2, 20),
+                new Player('drs', 1, 13), new Player('marco', 1, 10),
+                new Player('natascha', 1, 10), new Player('juri', 1, 10),
+                new Player('tim', 1, 10), new Player('samy', 0, 6),
+                new Player('lilly', 0, 6), new Player('skonair', 0, 3)
         ]
     }
 
@@ -63,11 +63,11 @@ class BlockchainAnalyzerSpecification extends Specification {
 
         expect:
         blockchainAnalyzer.findTopTenFlexQPlayers() == [
-                new Player('ruby', 30), new Player('deen', 25),
-                new Player('alexr', 10), new Player('jani', 10),
-                new Player('nats', 10), new Player('saschar', 5),
-                new Player('xander', 5), new Player('skonair', 5),
-                new Player('kevin', 5), new Player('drs', 3)
+                new Player('ruby', 3, 30), new Player('deen', 2, 25),
+                new Player('alexr', 1, 10), new Player('jani', 1, 10),
+                new Player('nats', 1, 10), new Player('saschar', 0, 5),
+                new Player('xander', 0, 5), new Player('skonair', 0, 5),
+                new Player('kevin', 0, 5), new Player('drs', 0, 3)
         ]
     }
 

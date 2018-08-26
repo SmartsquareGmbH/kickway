@@ -8,20 +8,25 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
     private fun findAllNonNullGames() = blockchainRepository.fetch().blocks.mapNotNull { it.games?.first() }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun List<Pair<String, Int>>.topTen() =
-        this.groupBy { (playerName) -> playerName }
-            .mapValues { (_, goalsByName) -> goalsByName.sumBy { (_, goals) -> goals } }
-            .toList()
-            .sortedByDescending { (_, goals) -> goals }
-            .take(10)
-            .map { (name, goals) -> Player(name, goals) }
+    private inline fun List<GameParticipant>.topTen() = this.groupBy { (playerName) -> playerName }
+        .mapValues { (_, participants) ->
+            participants.sumBy { participant -> if (participant.won) 1 else 0 } to
+                participants.sumBy { it.goals }
+        }
+        .toList()
+        .sortedWith(
+            compareByDescending<Pair<String, Pair<Int, Int>>> { (_, score) -> score.first }
+                .thenByDescending { (_, score) -> score.second }
+        )
+        .take(10)
+        .map { (name, score) -> Player(name, score.first, score.second) }
 
     fun findTopTenSoloQPlayers() = findAllNonNullGames()
         .filter { it.team1.players.size == 1 && it.team2.players.size == 1 }
         .flatMap {
             listOf(
-                it.team1.players.first() to it.score.goals1,
-                it.team2.players.first() to it.score.goals2
+                GameParticipant(it.team1.players.first(), it.score.goals1),
+                GameParticipant(it.team2.players.first(), it.score.goals2)
             )
         }.topTen()
 
@@ -29,10 +34,10 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
         .filter { it.team1.players.size == 2 && it.team2.players.size == 2 }
         .flatMap {
             listOf(
-                it.team1.players.first() to it.score.goals1,
-                it.team1.players[1] to it.score.goals1,
-                it.team2.players.first() to it.score.goals2,
-                it.team2.players[1] to it.score.goals2
+                GameParticipant(it.team1.players.first(), it.score.goals1),
+                GameParticipant(it.team1.players[1], it.score.goals1),
+                GameParticipant(it.team2.players.first(), it.score.goals2),
+                GameParticipant(it.team2.players[1], it.score.goals2)
             )
         }.topTen()
 
@@ -44,15 +49,15 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
         .flatMap {
             if (it.team1.players.size == 2) {
                 listOf(
-                    it.team1.players.first() to it.score.goals1,
-                    it.team1.players[1] to it.score.goals1,
-                    it.team2.players.first() to it.score.goals2
+                    GameParticipant(it.team1.players.first(), it.score.goals1),
+                    GameParticipant(it.team1.players[1], it.score.goals1),
+                    GameParticipant(it.team2.players.first(), it.score.goals2)
                 )
             } else {
                 listOf(
-                    it.team1.players.first() to it.score.goals1,
-                    it.team2.players.first() to it.score.goals2,
-                    it.team2.players[1] to it.score.goals2
+                    GameParticipant(it.team1.players.first(), it.score.goals1),
+                    GameParticipant(it.team2.players.first(), it.score.goals2),
+                    GameParticipant(it.team2.players[1], it.score.goals2)
                 )
             }
         }.topTen()
@@ -79,4 +84,6 @@ class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository)
 
         return PlayerStatistic(averageGoalsPerGame, winRate, totalCrawls, totalNumberOfWins, totalNumberOfLosses)
     }
+
+    private data class GameParticipant(val name: String, val goals: Int, val won: Boolean = goals >= 10)
 }
