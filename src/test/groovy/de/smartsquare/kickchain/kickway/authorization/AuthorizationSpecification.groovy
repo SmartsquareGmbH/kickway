@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static de.smartsquare.kickchain.kickway.TestUtils.toJson
+import static de.smartsquare.kickchain.kickway.JSONMapper.toJson
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
