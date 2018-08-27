@@ -20,7 +20,7 @@ class GameController(private val gameRepository: GameRepository) {
         if (game.score.goals1 != 10 && game.score.goals2 != 10) {
             return ResponseEntity.badRequest().body("Unfinished games cannot be persisted")
         }
-        if(game.score.goals1 < 0 || game.score.goals2 < 0) {
+        if (game.score.goals1 < 0 || game.score.goals2 < 0) {
             return ResponseEntity.badRequest().body("A team cannot score minus goals")
         }
 
