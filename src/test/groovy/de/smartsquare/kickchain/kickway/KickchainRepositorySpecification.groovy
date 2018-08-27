@@ -1,6 +1,5 @@
 package de.smartsquare.kickchain.kickway
 
-import de.smartsquare.kickchain.kickway.ConfigurationProperties
 import de.smartsquare.kickchain.kickway.analyzing.BlockchainRepository
 import de.smartsquare.kickchain.kickway.analyzing.KickchainException
 import org.mockserver.integration.ClientAndServer
