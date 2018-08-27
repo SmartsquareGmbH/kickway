@@ -10,7 +10,7 @@ The foosball table is connected to a raspberry which communicates with two photo
 
 # Use-Cases
   - Authorize the mobile clients
-  - Store a game 
+  - Store games
   - Fetch the statistics
 
 # Prerequisites
