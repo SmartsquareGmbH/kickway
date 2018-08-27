@@ -11,11 +11,9 @@ The foosball table is connected to a raspberry which communicates with two photo
 ![](https://preview.ibb.co/h26qkz/Untitled_Diagram_7.jpg)
 
 # Use-Cases
-  - Create a new game
-  - Join an existing game
-  - Register a new goal
-  - View the top ten SoloQ, DuoQ and FlexQ players
-  - View player specific statistics
+  - Authorize the mobile clients
+  - Store a game 
+  - Fetch the statistics
 
 # Prerequisites
 
