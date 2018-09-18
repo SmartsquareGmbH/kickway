@@ -29,6 +29,6 @@ kickway.kickchain.password=niahckcik
 # Links
 
 :link: [Kickchain](https://github.com/smartsquare/kickchain)
-:iphone: [Android App](https://github.com/SmartsquareGmbH/kickchain-android-client)
+:iphone: [Android App](https://github.com/SmartsquareGmbH/kickdroid)
 :pager: [Raspberry PI](https://github.com/SmartsquareGmbH/kickpi)
 
