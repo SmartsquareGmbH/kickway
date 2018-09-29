@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 @Service
 class BlockchainAnalyzer(private val blockchainRepository: BlockchainRepository) {
 
-    private fun findAllNonNullGames() = blockchainRepository.fetch().blocks.mapNotNull { it.games?.first() }
+    private fun findAllNonNullGames() = blockchainRepository.fetch().blocks.mapNotNull { it.games?.firstOrNull() }
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun List<GameParticipant>.topTen() = this.groupBy { (playerName) -> playerName }
