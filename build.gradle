@@ -1,18 +1,21 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 buildscript {
     ext {
-        gradleVersion = "4.9"
+        gradleVersion = "4.10.2"
         gradleVersionsVersion = "0.20.0"
 
-        kotlinVersion = "1.2.51"
-        springBootVersion = "2.0.4.RELEASE"
+        kotlinVersion = "1.2.71"
+        springBootVersion = "2.0.5.RELEASE"
 
-        detektVersion = "1.0.0.RC8"
-        ktlintVersion = "0.27.0"
-        ktlintGradleVersion = "5.0.0"
-        codeNarcVersion = "1.2"
-        jacocoVersion = "0.8.1"
+        detektVersion = "1.0.0.RC9.2"
+        ktlintVersion = "0.28.0"
+        ktlintGradleVersion = "6.0.0"
+        codeNarcVersion = "1.2.1"
+        jacocoVersion = "0.8.2"
 
-        jacksonVersion = "2.9.6"
+        jacksonVersion = "2.9.7"
 
         spockVersion = "1.1-groovy-2.4"
 
@@ -59,7 +62,7 @@ version = "1.0.0"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-tasks.matching { it.name.matches("compile.*Kotlin") }.all {
+tasks.withType(KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
         jvmTarget = "1.8"
@@ -106,16 +109,18 @@ jacocoTestReport {
 detekt {
     version = detektVersion
 
-    profile("main") {
-        input = "$projectDir/src/main/kotlin"
-        config = "$projectDir/config/detekt/detekt.yml"
-        output = "$buildDir/reports/detekt"
+    config = files("$projectDir/config/detekt/detekt.yml")
+    input = files("$projectDir/src/main/kotlin")
+
+    reports {
+        xml.destination = file("$buildDir/reports/detekt/detekt.xml")
+        html.destination = file("$buildDir/reports/detekt/detekt.html")
     }
 }
 
 ktlint {
     version = ktlintVersion
-    reporters = ["CHECKSTYLE"]
+    reporters = [ReporterType.CHECKSTYLE]
 }
 
 codenarc {
@@ -126,8 +131,6 @@ codenarc {
 
 gradle.projectsEvaluated {
     test { finalizedBy jacocoTestReport }
-
-    check.dependsOn detektCheck
 }
 
 wrapper {
