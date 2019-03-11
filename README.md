@@ -22,8 +22,8 @@ Kickchain specific application.properties:
 
 ``` 
 kickway.kickchain.url=https://localhost:7472
-kickway.kickchain.name=kickchain
-kickway.kickchain.password=niahckcik
+kickway.kickchain.authorization.name=kickchain
+kickway.kickchain.authorization.password=niahckcik
 ```
 
 # Links
