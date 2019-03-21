@@ -1,13 +1,17 @@
 package de.smartsquare.kickchain.kickway.storing
 
-import de.smartsquare.kickchain.kickway.analyzing.Blockchain
+import de.smartsquare.kickchain.kickway.Blockchain
+import de.smartsquare.kickchain.kickway.elo.EloRatingRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GameController(private val gameRepository: GameRepository) {
+class GameController(
+    private val gameRepository: GameRepository,
+    private val eloRatingRepository: EloRatingRepository
+) {
 
     @PostMapping("/game")
     internal fun save(@RequestBody game: Blockchain.Block.Game): ResponseEntity<Any> {

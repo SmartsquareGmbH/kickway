@@ -20,6 +20,8 @@ buildscript {
         spockVersion = "1.1-groovy-2.4"
 
         mockserverVersion = "5.4.1"
+
+        kluentVersion = "1.47"
     }
 
     repositories {
@@ -64,7 +66,7 @@ targetCompatibility = 1.8
 
 tasks.withType(KotlinCompile).all {
     kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
+        freeCompilerArgs = ["-Xjsr305=strict", "-Xjvm-default=enable"]
         jvmTarget = "1.8"
     }
 }
@@ -77,6 +79,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "com.h2database:h2"
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     implementation 'org.springframework.data:spring-data-keyvalue'
@@ -93,6 +97,8 @@ dependencies {
 
     testImplementation "org.spockframework:spock-core:$spockVersion"
     testImplementation "org.spockframework:spock-spring:$spockVersion"
+
+    testImplementation "org.amshove.kluent:kluent:$kluentVersion"
 }
 
 jacoco {

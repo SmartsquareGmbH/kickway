@@ -1,7 +1,7 @@
 package de.smartsquare.kickchain.kickway.storing
 
 import de.smartsquare.kickchain.kickway.ConfigurationProperties
-import de.smartsquare.kickchain.kickway.analyzing.Blockchain
+import de.smartsquare.kickchain.kickway.Blockchain
 import org.springframework.stereotype.Repository
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity

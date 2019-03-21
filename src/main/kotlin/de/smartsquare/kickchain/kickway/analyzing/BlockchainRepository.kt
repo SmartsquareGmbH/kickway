@@ -1,5 +1,6 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
+import de.smartsquare.kickchain.kickway.Blockchain
 import de.smartsquare.kickchain.kickway.ConfigurationProperties
 import org.springframework.stereotype.Repository
 import org.springframework.web.client.RestClientException

@@ -1,5 +1,6 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
+import de.smartsquare.kickchain.kickway.Blockchain
 import spock.lang.Specification
 
 import static de.smartsquare.kickchain.kickway.analyzing.BlockchainBuilder.aBlockchain
