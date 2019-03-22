@@ -1,5 +1,7 @@
 package de.smartsquare.kickchain.kickway.analyzing
 
+import de.smartsquare.kickchain.kickway.Blockchain
+
 class BlockchainBuilder {
 
     def games = []
@@ -32,7 +34,7 @@ class BlockchainBuilder {
     def against(name) {
         games << new Blockchain.Block([
                 new Blockchain.Block.Game(
-                        new Blockchain.Block.Game.Team(firstPlayer instanceof String ? [firstPlayer] :  firstPlayer),
+                        new Blockchain.Block.Game.Team(firstPlayer instanceof String ? [firstPlayer] : firstPlayer,),
                         new Blockchain.Block.Game.Team(name instanceof String ? [name] : name),
                         new Blockchain.Block.Game.Score(scoreOfFirstPlayer, scoreOfSecondPlayer)
                 )

@@ -1,13 +1,15 @@
 package de.smartsquare.kickchain.kickway.storing
 
-import de.smartsquare.kickchain.kickway.analyzing.Blockchain
+import de.smartsquare.kickchain.kickway.Blockchain
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GameController(private val gameRepository: GameRepository) {
+class GameController(
+    private val gamePersistenceService: GamePersistenceService
+) {
 
     @PostMapping("/game")
     internal fun save(@RequestBody game: Blockchain.Block.Game): ResponseEntity<Any> {
@@ -24,7 +26,8 @@ class GameController(private val gameRepository: GameRepository) {
             return ResponseEntity.badRequest().body("A team cannot score minus goals")
         }
 
-        gameRepository.save(game)
+        gamePersistenceService.store(game)
+
         return ResponseEntity.ok().build()
     }
 }
