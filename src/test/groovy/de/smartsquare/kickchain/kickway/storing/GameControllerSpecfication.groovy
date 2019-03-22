@@ -1,6 +1,7 @@
 package de.smartsquare.kickchain.kickway.storing
 
 import de.smartsquare.kickchain.kickway.Blockchain
+import de.smartsquare.kickchain.kickway.elo.EloRatingRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,8 +23,12 @@ class GameControllerSpecfication extends Specification {
 
     @Autowired
     MockMvc mockMvc
+
     @MockBean
     GameRepository gameRepository
+
+    @Autowired
+    EloRatingRepository eloRatingRepository
 
     def 'unfinished game is a bad request'() {
         given:
@@ -91,7 +96,7 @@ class GameControllerSpecfication extends Specification {
                 .andExpect(content().string("A team cannot score minus goals"))
     }
 
-    def 'score game'() {
+    def 'store game'() {
         given:
         def game = """
                 {
@@ -106,5 +111,39 @@ class GameControllerSpecfication extends Specification {
 
         then:
         verify(gameRepository, times(1)).save(any(Blockchain.Block.Game.class))
+    }
+
+    def 'initial elo rating is assigned to the winner team'() {
+        given:
+        def game = """
+                {
+                    "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
+                    "score" : { "goals1" : "10" , "goals2" : "1" }
+                }
+        """
+        when:
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(game))
+
+        then:
+        1020.0 == eloRatingRepository.findEloByPlayernames("deen", "ruby")
+    }
+
+    def 'initial elo rating is assigned to the looser team'() {
+        given:
+        def game = """
+                {
+                    "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
+                    "score" : { "goals1" : "10" , "goals2" : "1" }
+                }
+        """
+        when:
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(game))
+
+        then:
+        980.0 == eloRatingRepository.findEloByPlayernames("AlexN", "DanielR")
     }
 }

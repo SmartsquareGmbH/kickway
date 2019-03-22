@@ -7,7 +7,6 @@ import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldBeLessThan
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
-import kotlin.math.roundToInt
 
 class EloCalculatorTest {
 
