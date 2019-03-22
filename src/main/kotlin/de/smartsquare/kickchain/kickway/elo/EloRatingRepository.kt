@@ -13,8 +13,15 @@ interface EloRatingRepository : CrudRepository<EloRating, Long> {
         "OR (e.team.second = :first AND e.team.first = :second)")
     fun findEloRatingByTeamFirstAndTeamSecond(first: String, second: String): Optional<EloRating>
 
+    fun findEloRatingByTeamFirst(first: String): Optional<EloRating>
+
     @JvmDefault
     fun findEloByPlayernames(first: String, second: String) = this.findEloRatingByTeamFirstAndTeamSecond(first, second)
+        .map { it.elo }
+        .orElse(1000.0)
+
+    @JvmDefault
+    fun findEloByPlayername(name: String) = this.findEloRatingByTeamFirst(name)
         .map { it.elo }
         .orElse(1000.0)
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
@@ -231,5 +230,41 @@ class GameControllerSpecfication extends Specification {
 
         then:
         1053.44 == eloRatingRepository.findEloByPlayernames("AlexN", "DanielR")
+    }
+
+    def 'store elo in flexq mode'() {
+        given:
+        def flexqGame = """
+                {
+                    "team1" : { "players" : ["deen"] } , "team2" : { "players" : ["DanielR", "AlexN"] } ,
+                    "score" : { "goals1" : "1" , "goals2" : "10" }
+                }
+        """
+
+        when:
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(flexqGame))
+
+        then:
+        1020.00 == eloRatingRepository.findEloByPlayernames("AlexN", "DanielR")
+    }
+
+    def 'store elo if in soloq mode'() {
+        given:
+        def soloqGame = """
+                {
+                    "team1" : { "players" : ["deen"] } , "team2" : { "players" : ["AlexN"] } ,
+                    "score" : { "goals1" : "1" , "goals2" : "10" }
+                }
+        """
+
+        when:
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(soloqGame))
+
+        then:
+        1020.00 == eloRatingRepository.findEloByPlayername("AlexN")
     }
 }

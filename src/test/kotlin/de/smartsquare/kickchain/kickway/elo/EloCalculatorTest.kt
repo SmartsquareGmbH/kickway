@@ -75,7 +75,7 @@ class EloCalculatorTest {
             Score(10, 2)
         )
 
-        val matchFactor = game.matchFactor("deen", "ruby")
+        val matchFactor = game.matchFactor("deen")
 
         matchFactor shouldEqual 1
     }
@@ -88,7 +88,7 @@ class EloCalculatorTest {
             Score(10, 2)
         )
 
-        val matchFactor = game.matchFactor("skonair", "lena")
+        val matchFactor = game.matchFactor("skonair")
 
         matchFactor shouldEqual 0
     }

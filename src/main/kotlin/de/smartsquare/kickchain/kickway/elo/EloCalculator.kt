@@ -12,7 +12,7 @@ import java.math.MathContext
  */
 fun Blockchain.Block.Game.readjust(one: EloRating, other: EloRating): AdjustedEloScore {
     val newEloOne =
-        one.elo + one.experienceFactor() * (this.matchFactor(one.team.first, one.team.second) - (one odds other))
+        one.elo + one.experienceFactor() * (this.matchFactor(one.team.first) - (one odds other))
     val newEloOther = other.elo + (one.elo - newEloOne)
 
     return AdjustedEloScore(
@@ -27,17 +27,12 @@ fun Blockchain.Block.Game.readjust(one: EloRating, other: EloRating): AdjustedEl
  * @return one in case of a victory or zero in case of a defeat.
  * @see https://en.wikipedia.org/wiki/Elo_rating_system
  */
-fun Blockchain.Block.Game.matchFactor(firstPlayer: String, secondPlayer: String) =
+fun Blockchain.Block.Game.matchFactor(player: String) =
     when {
-        this.team1.consistsOf(firstPlayer and secondPlayer) && this.score.goals1 == 10 -> 1
-        this.team2.consistsOf(firstPlayer and secondPlayer) && this.score.goals2 == 10 -> 1
+        this.team1.contains(player) && this.score.goals1 == 10 -> 1
+        this.team2.contains(player) && this.score.goals2 == 10 -> 1
         else -> 0
     }
-
-/**
- * This is just a fluent wrapper for the to infix function.
- */
-private infix fun String.and(other: String) = this to other
 
 /**
  * The experience factor is part of the elo formula to treat the different player levels.
@@ -58,4 +53,4 @@ fun EloRating.experienceFactor() = when {
  * @see https://en.wikipedia.org/wiki/Elo_rating_system
  */
 infix fun EloRating.odds(opposite: EloRating) =
-    BigDecimal((1 / (1 + Math.pow(10.0, (opposite.elo - this.elo) / 400)))).round(MathContext(3)).toDouble()
+    BigDecimal(1 / (1 + Math.pow(10.0, (opposite.elo - this.elo) / 400))).round(MathContext(3)).toDouble()

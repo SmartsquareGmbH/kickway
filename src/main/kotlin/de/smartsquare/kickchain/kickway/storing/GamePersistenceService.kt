@@ -15,15 +15,23 @@ class GamePersistenceService(
 
     @Transactional
     fun store(game: Blockchain.Block.Game) {
-        val eloOne = eloRatingRepository.findEloRatingByTeamFirstAndTeamSecond(game.team1.first, game.team1.second)
-            .orElse(EloRating(game.team1.first, game.team1.second, elo = 1000.0, matches = 0))
-        val eloTwo = eloRatingRepository.findEloRatingByTeamFirstAndTeamSecond(game.team2.first, game.team2.second)
-            .orElse(EloRating(game.team2.first, game.team2.second, elo = 1000.0, matches = 0))
-        val (newEloOne, newEloTwo) = game.readjust(eloOne, eloTwo)
+        val eloOfTeamOne = findEloOf(game.team1)
+        val eloOfTeamTwo = findEloOf(game.team2)
+
+        val (newEloOne, newEloTwo) = game.readjust(eloOfTeamOne, eloOfTeamTwo)
 
         eloRatingRepository.save(newEloOne)
         eloRatingRepository.save(newEloTwo)
 
         gameRepository.save(game)
+    }
+
+    private fun findEloOf(team: Blockchain.Block.Game.Team): EloRating {
+        return if (team.players.size > 1) {
+            eloRatingRepository.findEloRatingByTeamFirstAndTeamSecond(team.first, team.second)
+                .orElse(EloRating(team.first, team.second))
+        } else {
+            eloRatingRepository.findEloRatingByTeamFirst(team.first).orElse(EloRating(team.first))
+        }
     }
 }

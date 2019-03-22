@@ -49,4 +49,13 @@ class EloRatingRepositoryTest {
 
         returnedEloRating.isPresent shouldEqual true
     }
+
+    @Test
+    fun `store elo rating for single player`() {
+        repository.save(EloRating(Team("deen"), 1000.0, 1))
+
+        val returnedEloRating = repository.findEloRatingByTeamFirst("deen")
+
+        returnedEloRating.isPresent shouldEqual true
+    }
 }
