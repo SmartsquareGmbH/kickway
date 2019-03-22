@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class GameControllerSpecfication extends Specification {
 
     @Autowired
@@ -114,8 +116,7 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'initial elo rating is assigned to the winner team'() {
-        setup:
-        eloRatingRepository.deleteAll()
+        given:
         def game = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
@@ -132,8 +133,7 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'initial elo rating is assigned to the looser team'() {
-        setup:
-        eloRatingRepository.deleteAll()
+        given:
         def game = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
@@ -151,9 +151,7 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'play games with different playername orders'() {
-        setup:
-        eloRatingRepository.deleteAll()
-
+        given:
         def firstGame = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
@@ -193,9 +191,7 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'play games with different playername orders in team two'() {
-        setup:
-        eloRatingRepository.deleteAll()
-
+        given:
         def firstGame = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["DanielR", "AlexN"] } ,
