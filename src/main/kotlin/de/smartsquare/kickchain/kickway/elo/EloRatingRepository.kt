@@ -8,7 +8,9 @@ import java.util.Optional
 @Repository
 interface EloRatingRepository : CrudRepository<EloRating, Long> {
 
-    @Query("SELECT e FROM EloRating e WHERE (e.team.first = :first AND e.team.second = :second) OR (e.team.second = :first AND e.team.first = :second)")
+    @Query("SELECT e FROM EloRating e " +
+        "WHERE (e.team.first = :first AND e.team.second = :second) " +
+        "OR (e.team.second = :first AND e.team.first = :second)")
     fun findEloRatingByTeamFirstAndTeamSecond(first: String, second: String): Optional<EloRating>
 
     @JvmDefault

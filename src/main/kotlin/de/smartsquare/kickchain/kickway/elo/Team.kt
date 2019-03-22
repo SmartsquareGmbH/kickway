@@ -4,4 +4,8 @@ import java.io.Serializable
 import javax.persistence.Embeddable
 
 @Embeddable
-data class Team(val first: String, val second: String) : Serializable
+data class Team(val first: String, val second: String) : Serializable {
+    companion object {
+        const val serialVersionUID = 1L
+    }
+}

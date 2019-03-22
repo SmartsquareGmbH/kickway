@@ -14,4 +14,8 @@ data class EloRating(
     constructor(firstPlayer: String, secondPlayer: String, elo: Double, matches: Int) : this(
         Team(firstPlayer, secondPlayer), elo, matches
     )
+
+    companion object {
+        const val serialVersionUID = 1L
+    }
 }

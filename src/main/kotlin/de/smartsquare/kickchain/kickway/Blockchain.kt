@@ -10,7 +10,7 @@ data class Blockchain(@JsonProperty("chain") val blocks: List<Block>) {
 
             data class Team(val players: List<String>) {
                 val first by lazy { players[0] }
-                val second  by lazy { players[1] }
+                val second by lazy { players[1] }
             }
 
             data class Score(val goals1: Int, val goals2: Int)
