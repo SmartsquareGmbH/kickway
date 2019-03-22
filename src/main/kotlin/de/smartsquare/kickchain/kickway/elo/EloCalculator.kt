@@ -26,12 +26,10 @@ fun Blockchain.Block.Game.readjust(one: EloRating, other: EloRating): AdjustedEl
  * @see https://en.wikipedia.org/wiki/Elo_rating_system
  */
 fun Blockchain.Block.Game.matchFactor(firstPlayer: String, secondPlayer: String) =
-    if (this.team1.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals1 == 10) {
-        1
-    } else if (this.team2.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals2 == 10) {
-        1
-    } else {
-        0
+    when {
+        this.team1.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals1 == 10 -> 1
+        this.team2.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals2 == 10 -> 1
+        else -> 0
     }
 
 /**
