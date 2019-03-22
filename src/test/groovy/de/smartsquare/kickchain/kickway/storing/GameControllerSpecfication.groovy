@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class GameControllerSpecfication extends Specification {
 
     @Autowired
@@ -31,6 +30,10 @@ class GameControllerSpecfication extends Specification {
 
     @Autowired
     EloRatingRepository eloRatingRepository
+
+    def cleanup() {
+        eloRatingRepository.deleteAll()
+    }
 
     def 'unfinished game is a bad request'() {
         given:
