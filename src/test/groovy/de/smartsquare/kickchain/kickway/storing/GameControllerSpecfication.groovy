@@ -114,7 +114,8 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'initial elo rating is assigned to the winner team'() {
-        given:
+        setup:
+        eloRatingRepository.deleteAll()
         def game = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
@@ -131,13 +132,15 @@ class GameControllerSpecfication extends Specification {
     }
 
     def 'initial elo rating is assigned to the looser team'() {
-        given:
+        setup:
+        eloRatingRepository.deleteAll()
         def game = """
                 {
                     "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
                     "score" : { "goals1" : "10" , "goals2" : "1" }
                 }
         """
+
         when:
         mockMvc.perform(post("/game")
                 .contentType(APPLICATION_JSON)
