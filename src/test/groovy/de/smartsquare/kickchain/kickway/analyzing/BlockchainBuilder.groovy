@@ -34,8 +34,8 @@ class BlockchainBuilder {
     def against(name) {
         games << new Blockchain.Block([
                 new Blockchain.Block.Game(
-                        new Blockchain.Block.Game.Team(firstPlayer instanceof String ? [firstPlayer] : firstPlayer, 1000),
-                        new Blockchain.Block.Game.Team(name instanceof String ? [name] : name, 1000),
+                        new Blockchain.Block.Game.Team(firstPlayer instanceof String ? [firstPlayer] : firstPlayer,),
+                        new Blockchain.Block.Game.Team(name instanceof String ? [name] : name),
                         new Blockchain.Block.Game.Score(scoreOfFirstPlayer, scoreOfSecondPlayer)
                 )
         ])

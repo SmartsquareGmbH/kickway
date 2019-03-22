@@ -1,12 +1,18 @@
 package de.smartsquare.kickchain.kickway.elo
 
 import de.smartsquare.kickchain.kickway.Blockchain
+/*
+/**
+ * @see https://de.wikipedia.org/wiki/Elo-Zahl
+ */
+fun Blockchain.Block.Game.adjustedEloScore(rating: EloRating): AdjustedEloScore {
+    AdjustedEloScore(null, null)
+}*/
 
-infix fun Blockchain.Block.Game.calculate(game: Blockchain.Block.Game): AdjustedEloScore {
-    return AdjustedEloScore(1, 2)
-}
-
-infix fun Blockchain.Block.Game.Team.odds(opposite: Blockchain.Block.Game.Team) =
+/**
+ * @see https://de.wikipedia.org/wiki/Elo-Zahl
+ */
+infix fun EloRating.odds(opposite: EloRating) =
     (1 / (1 + Math.pow(10.0, (this.elo - opposite.elo.toDouble()) / 400))).roundToThreeDecimals()
 
 private fun Double.roundToThreeDecimals() = Math.round(this * 1000.0) / 1000.0

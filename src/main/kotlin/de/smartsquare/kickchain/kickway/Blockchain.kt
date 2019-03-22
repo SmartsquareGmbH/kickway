@@ -8,7 +8,7 @@ data class Blockchain(@JsonProperty("chain") val blocks: List<Block>) {
 
         data class Game(val team1: Team, val team2: Team, val score: Score) {
 
-            data class Team(val players: List<String>, val elo: Int = 1000)
+            data class Team(val players: List<String>)
 
             data class Score(val goals1: Int, val goals2: Int)
         }

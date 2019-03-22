@@ -18,7 +18,7 @@ class EloRatingRepositoryTest {
 
     @Test
     fun `find elo rating by player names`() {
-        val givenEloRating = repository.save(EloRating(Team(first = "deen", second = "ruby"), 1000))
+        val givenEloRating = repository.save(EloRating("deen", "ruby", 1000, 1))
 
         val returnedEloRating = repository.findEloRatingByTeamFirstAndTeamSecond(first = "deen", second = "ruby")
 
@@ -28,7 +28,7 @@ class EloRatingRepositoryTest {
 
     @Test
     fun `find elo value by player names`() {
-        repository.save(EloRating(Team(first = "deen", second = "ruby"), 1337))
+        repository.save(EloRating("deen", "ruby", 1337, 12))
 
         val elo = repository.findEloByPlayernames(first = "deen", second = "ruby")
 

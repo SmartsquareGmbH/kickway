@@ -1,6 +1,5 @@
 package de.smartsquare.kickchain.kickway.elo
 
-import de.smartsquare.kickchain.kickway.Blockchain
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 
@@ -8,8 +7,8 @@ class EloCalculatorTest {
 
     @Test
     fun `deen and drs should probably win against ruby and skonair`() {
-        val deen_and_drs = Blockchain.Block.Game.Team(listOf("deen", "drs"), 2577)
-        val ruby_and_skonair = Blockchain.Block.Game.Team(listOf("ruby", "skonair"), 2806)
+        val deen_and_drs = EloRating("deen", "drs", 2577, 1)
+        val ruby_and_skonair = EloRating("ruby", "skonair", 2806, 1)
 
         val odds = deen_and_drs odds ruby_and_skonair
 
@@ -18,8 +17,8 @@ class EloCalculatorTest {
 
     @Test
     fun `danielr and alexn should probably win against saschar and ruby`() {
-        val danielr_and_alexn = Blockchain.Block.Game.Team(listOf("danielr", "alexn"), 2577)
-        val saschar_and_ruby = Blockchain.Block.Game.Team(listOf("saschar", "ruby"), 2300)
+        val danielr_and_alexn = EloRating("danielr", "alexn", 2577, 1)
+        val saschar_and_ruby = EloRating("saschar", "ruby", 2300, 1)
 
         val odds = danielr_and_alexn odds saschar_and_ruby
 
@@ -28,8 +27,8 @@ class EloCalculatorTest {
 
     @Test
     fun `match between ruby and deen vs skonair and lena probably results in a draw`() {
-        val ruby_and_deen = Blockchain.Block.Game.Team(listOf("ruby", "deen"), 2577)
-        val skonair_and_lena = Blockchain.Block.Game.Team(listOf("skonair", "lena"), 2577)
+        val ruby_and_deen = EloRating("ruby", "deen", 2577, 1)
+        val skonair_and_lena = EloRating("skonair", "lena", 2577, 1)
 
         val odds = ruby_and_deen odds skonair_and_lena
 
