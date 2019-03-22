@@ -29,10 +29,15 @@ fun Blockchain.Block.Game.readjust(one: EloRating, other: EloRating): AdjustedEl
  */
 fun Blockchain.Block.Game.matchFactor(firstPlayer: String, secondPlayer: String) =
     when {
-        this.team1.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals1 == 10 -> 1
-        this.team2.players.containsAll(listOf(firstPlayer, secondPlayer)) && this.score.goals2 == 10 -> 1
+        this.team1.consistsOf(firstPlayer and secondPlayer) && this.score.goals1 == 10 -> 1
+        this.team2.consistsOf(firstPlayer and secondPlayer) && this.score.goals2 == 10 -> 1
         else -> 0
     }
+
+/**
+ * This is just a fluent wrapper for the to infix function.
+ */
+private infix fun String.and(other: String) = this to other
 
 /**
  * The experience factor is part of the elo formula to treat the different player levels.

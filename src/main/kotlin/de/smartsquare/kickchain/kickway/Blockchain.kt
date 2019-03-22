@@ -11,6 +11,9 @@ data class Blockchain(@JsonProperty("chain") val blocks: List<Block>) {
             data class Team(val players: List<String>) {
                 val first by lazy { players[0] }
                 val second by lazy { players[1] }
+
+                fun consistsOf(players: Pair<String, String>) =
+                    this.players.containsAll(listOf(players.first, players.second))
             }
 
             data class Score(val goals1: Int, val goals2: Int)
