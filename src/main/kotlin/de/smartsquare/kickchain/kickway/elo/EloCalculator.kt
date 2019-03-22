@@ -1,6 +1,8 @@
 package de.smartsquare.kickchain.kickway.elo
 
 import de.smartsquare.kickchain.kickway.Blockchain
+import java.math.BigDecimal
+import java.math.MathContext
 
 /**
  * This method is used to recalculate the elo scores after a match has been played.
@@ -51,6 +53,4 @@ fun EloRating.experienceFactor() = when {
  * @see https://en.wikipedia.org/wiki/Elo_rating_system
  */
 infix fun EloRating.odds(opposite: EloRating) =
-    (1 / (1 + Math.pow(10.0, (opposite.elo - this.elo) / 400))).roundToThreeDecimals()
-
-private fun Double.roundToThreeDecimals() = Math.round(this * 1000.0) / 1000.0
+    BigDecimal((1 / (1 + Math.pow(10.0, (opposite.elo - this.elo) / 400)))).round(MathContext(3)).toDouble()
