@@ -149,4 +149,46 @@ class GameControllerSpecfication extends Specification {
         then:
         980.0 == eloRatingRepository.findEloByPlayernames("AlexN", "DanielR")
     }
+
+    def 'play games with different playername orders'() {
+        setup:
+        eloRatingRepository.deleteAll()
+
+        def firstGame = """
+                {
+                    "team1" : { "players" : ["deen", "ruby"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
+                    "score" : { "goals1" : "10" , "goals2" : "1" }
+                }
+        """
+
+        def secondGame = """
+                {
+                    "team1" : { "players" : ["ruby", "deen"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
+                    "score" : { "goals1" : "10" , "goals2" : "1" }
+                }
+        """
+
+        def thirdGame = """
+                {
+                    "team1" : { "players" : ["ruby", "deen"] } , "team2" : { "players" : ["AlexN", "DanielR"] } ,
+                    "score" : { "goals1" : "10" , "goals2" : "1" }
+                }
+        """
+
+        when:
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(firstGame))
+
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(secondGame))
+
+        mockMvc.perform(post("/game")
+                .contentType(APPLICATION_JSON)
+                .content(thirdGame))
+
+        then:
+        1053.44 == eloRatingRepository.findEloByPlayernames("ruby", "deen")
+    }
 }

@@ -18,12 +18,11 @@ class EloRatingRepositoryTest {
 
     @Test
     fun `find elo rating by player names`() {
-        val givenEloRating = repository.save(EloRating("deen", "ruby", 1000.0, 1))
+        repository.save(EloRating("deen", "ruby", 1000.0, 1))
 
         val returnedEloRating = repository.findEloRatingByTeamFirstAndTeamSecond(first = "deen", second = "ruby")
 
         returnedEloRating.isPresent shouldEqual true
-        returnedEloRating.get() shouldEqual givenEloRating
     }
 
     @Test
@@ -40,5 +39,14 @@ class EloRatingRepositoryTest {
         val elo = repository.findEloByPlayernames(first = "deen", second = "ruby")
 
         elo shouldEqual 1000.0
+    }
+
+    @Test
+    fun `ignore teamname order`() {
+        repository.save(EloRating("deen", "ruby", 1000.0, 1))
+
+        val returnedEloRating = repository.findEloRatingByTeamFirstAndTeamSecond(first = "ruby", second = "deen")
+
+        returnedEloRating.isPresent shouldEqual true
     }
 }
