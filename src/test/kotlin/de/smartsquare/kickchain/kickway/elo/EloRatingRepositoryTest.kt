@@ -18,7 +18,7 @@ class EloRatingRepositoryTest {
 
     @Test
     fun `find elo rating by player names`() {
-        val givenEloRating = repository.save(EloRating("deen", "ruby", 1000, 1))
+        val givenEloRating = repository.save(EloRating("deen", "ruby", 1000.0, 1))
 
         val returnedEloRating = repository.findEloRatingByTeamFirstAndTeamSecond(first = "deen", second = "ruby")
 
@@ -28,17 +28,17 @@ class EloRatingRepositoryTest {
 
     @Test
     fun `find elo value by player names`() {
-        repository.save(EloRating("deen", "ruby", 1337, 12))
+        repository.save(EloRating("deen", "ruby", 1337.0, 12))
 
         val elo = repository.findEloByPlayernames(first = "deen", second = "ruby")
 
-        elo shouldEqual 1337
+        elo shouldEqual 1337.0
     }
 
     @Test
     fun `return default elo if the team has no match history`() {
         val elo = repository.findEloByPlayernames(first = "deen", second = "ruby")
 
-        elo shouldEqual 1000
+        elo shouldEqual 1000.0
     }
 }

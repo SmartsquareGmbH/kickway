@@ -12,5 +12,5 @@ interface EloRatingRepository : CrudRepository<EloRating, Long> {
     @JvmDefault
     fun findEloByPlayernames(first: String, second: String) = this.findEloRatingByTeamFirstAndTeamSecond(first, second)
         .map { it.elo }
-        .orElse(1000)
+        .orElse(1000.0)
 }

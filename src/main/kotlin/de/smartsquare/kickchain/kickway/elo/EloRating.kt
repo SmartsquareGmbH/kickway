@@ -8,10 +8,10 @@ import javax.persistence.Entity
 data class EloRating(
     @EmbeddedId
     val team: Team,
-    val elo: Int,
+    val elo: Double,
     val matches: Int
 ) : Serializable {
-    constructor(firstPlayer: String, secondPlayer: String, elo: Int, matches: Int) : this(
+    constructor(firstPlayer: String, secondPlayer: String, elo: Double, matches: Int) : this(
         Team(firstPlayer, secondPlayer), elo, matches
     )
 }
